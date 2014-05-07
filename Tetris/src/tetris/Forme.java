@@ -26,6 +26,15 @@ public class Forme {
         return taille;
     }
 
+    public void rotCW()
+    {
+        setRotation(rotation+1);
+    }
+    public void rotACW()
+    {
+        setRotation(rotation-1);
+    }
+    
     public void setTaille(int taille) {
         taille = (taille < 1 ? 1 : taille);
         this.taille = taille;

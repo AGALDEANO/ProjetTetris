@@ -10,13 +10,8 @@ package tetris;
  *
  * @author p1106501
  */
-public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
-    
+public class Piece {
+    // vitesse
+    // couleur
+    // forme
 }

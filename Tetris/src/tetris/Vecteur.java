@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author p1106501
  * @param <T>
  */
-public class Vecteur<T> {
+public class Vecteur<T extends Number> {
     private ArrayList<T> coordonnees = new ArrayList<>();
     
     public Vecteur(T x, T y)

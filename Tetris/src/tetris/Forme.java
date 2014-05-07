@@ -13,20 +13,29 @@ import java.util.ArrayList;
  */
 public class Forme {
 
-    private ArrayList<Vecteur[]> points;
-    private Vecteur[] etat;
+    private ArrayList<Vecteur<Integer>[]> points;
+    private Vecteur<Integer>[] etat;
     private int taille;
     private int origine;
     private int rotation;
     private int nombreRotation;
     private String nom;
 
-        //===========================================================
-    public ArrayList<Vecteur[]> getPoints() {
+    //===========================================================
+    public int getTaille() {
+        return taille;
+    }
+
+    public void setTaille(int taille) {
+        taille = (taille < 1 ? 1 : taille);
+        this.taille = taille;
+    }
+
+    public ArrayList<Vecteur<Integer>[]> getPoints() {
         return points;
     }
 
-    public void setPoints(ArrayList<Vecteur[]> value) {
+    public void setPoints(ArrayList<Vecteur<Integer>[]> value) {
         points = value;
     }
 
@@ -55,56 +64,43 @@ public class Forme {
         rotation = value;
         rotation %= nombreRotation;
     }
-    public int NombreRotation
 
-    {
-        get {
-            return nombreRotation;
-        }
-        set {
-            nombreRotation = (value < 0) ? 0 : value;
-        }
+    public int getNombreRotation() {
+        return nombreRotation;
     }
 
-    public int Origine
+    public void setNombreRotation(int value) {
+        nombreRotation = (value < 0) ? 0 : value;
+    }
 
-    {
-        get {
-            return origine;
-        }
-        set
-            {
-            origine = value;
-            origine %= 4;
-        }
+    public int getOrigine() {
+        return origine;
+    }
+
+    public void setOrigine(int value) {
+
+        origine = value;
+        origine %= 4;
     }
 
     public Forme() {
-        this.points = new ArrayList<>() {
-        };
-        rotation = nombreRotation = origine = 0;
-        vecteurs[0, 0] = 0;
-            vecteurs[0, 1] = 0;
-            vecteurs[1, 0] = 0;
-            vecteurs[1, 1] = 0;
-            vecteurs[2, 0] = 0;
-            vecteurs[2
-    
+        taille = 3;
+        etat = new Vecteur[taille];
 
-    , 1] = 0;
+        rotation = nombreRotation = origine = 0;
+        for (int i = 0; i < taille; i++) {
+            etat[i].set(0, i);
         }
+    }
 
-        public Forme(int x1, int y1, int x2, int y2, int x3, int y3) {
-        this.points = new ArrayList<>() {
-        };
+    public Forme(ArrayList<Vecteur> values) {
+        taille = values.size();
+        etat = new Vecteur[taille];
         rotation = nombreRotation = origine = 0;
-        vecteurs[0, 0] = x1;
-        vecteurs[0, 1] = y1;
-        vecteurs[1, 0] = x2;
-        vecteurs[1, 1] = y2;
-        vecteurs[2, 0] = x3;
-        vecteurs[2, 1] = y3;
-        Points = generationPoints(vecteurs, 0);
+        for (int i = 0; i < taille; i++) {
+            etat[i] = values.get(i);
+        }
+        points = generationPoints(etat, 0);
     }
 
     public Forme(int x1, int y1, int x2, int y2, int x3, int y3, int nbRot) {
@@ -144,8 +140,8 @@ public class Forme {
         }
     }
 
-        //===========================================================
-    private ArrayList<Vecteur[]> generationPoints(Vecteur[] vecteursForme, int typeRot) {
+    //===========================================================
+    private ArrayList<Vecteur<Integer>[]> generationPoints(Vecteur<Integer>[] vecteursForme, int typeRot) {
         // rotations : (a;b) (-b;a) (-a;-b) (b;-a)
         int rotation = 0, maxRot, i, j, k, temp;
         Vecteur[] vec = new int[3,
@@ -156,18 +152,38 @@ public class Forme {
         Vecteur[] ens = new int[4, 2];
             ens[0, 0] = 0;
             ens[0
+        
+        
+        
+        
+        
         , 1] = 0;
             for (rotation = 0; rotation < maxRot; rotation++) {
             for (k = 0; k < 1; k++) {
                 if (k == 0) {
                     ens[0, 0] = 0;
                         ens[0
+                  
+                  
+                  
+                  
+                  
                   , 1] = 0;
                     }
                     else
                     {
                         ens[0, 0] = -vec[k - 1, 0];
                         ens[0, 1] = -vec[k - 1
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 
                 , 1];
                     }
@@ -176,11 +192,26 @@ public class Forme {
                         ens[i + 1, j] = vec[i, j]+ens[0,j
                     
                 
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
                 ];
                         }
                     }
                     listePoints.Add(ens);
                 ens = new int[4
+            
+            
+            
+            
+            
             
             , 2];
                 }
@@ -199,13 +230,32 @@ public class Forme {
         int i, j;
         for (i = 0; i < 3; i++) {
             for (j = 0; j < 2; j++) {
-                if (vecteurs[i {
-                    
-                }, j
+                if (vecteurs[i      {
+
+                },j
                 ] != 0) return false;
             }
         }
         return true;
+    }
+
+    public static Forme Forme(int i) {
+        switch (i) {
+            case 0:
+                return Forme.C();
+            case 1:
+                return Forme.T();
+            case 2:
+                return Forme.L();
+            case 3:
+                return Forme.J();
+            case 4:
+                return Forme.S();
+            case 5:
+                return Forme.Z();
+            default:
+                return Forme.C();
+        }
     }
 
     public static Forme T() {

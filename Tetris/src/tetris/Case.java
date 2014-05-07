@@ -13,5 +13,7 @@ import javax.swing.JPanel;
  * @author Dimitri
  */
 public class Case extends JPanel{
-    
+    public String ToString(){
+        return this.getBackground().toString();
+    }
 }

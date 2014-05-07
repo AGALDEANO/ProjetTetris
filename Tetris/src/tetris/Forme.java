@@ -51,6 +51,10 @@ public class Forme {
         return etat;
     }
 
+    public Vecteur[] getVecteurs() {
+        return points.get(rotation);
+    }
+
     public void setEtat(Vecteur[] value) {
         etat = value;
     }
@@ -103,140 +107,88 @@ public class Forme {
         points = generationPoints(etat, 0);
     }
 
-    public Forme(int x1, int y1, int x2, int y2, int x3, int y3, int nbRot) {
-        this.points = new ArrayList<>() {
-        };
+    public Forme(ArrayList<Vecteur> values, int nbRot) {
+        taille = values.size();
+        etat = new Vecteur[taille];
         rotation = origine = 0;
         nombreRotation = nbRot;
-        vecteurs[0, 0] = x1;
-        vecteurs[0, 1] = y1;
-        vecteurs[1, 0] = x2;
-        vecteurs[1, 1] = y2;
-        vecteurs[2, 0] = x3;
-        vecteurs[2, 1] = y3;
+        for (int i = 0; i < taille; i++) {
+            etat[i] = values.get(i);
+        }
         if (nbRot == 1) {
-            Points = new ArrayList<Vecteur[]>(generationPoints(vecteurs, nbRot));
+            points = generationPoints(etat, nbRot);
         } else {
-            Points = new ArrayList<Vecteur[]>(generationPoints(vecteurs, nbRot / 2));
+            points = generationPoints(etat, nbRot / 2);
         }
     }
 
-    public Forme(String nomForme, int x1, int y1, int x2, int y2, int x3, int y3, int nbRot) {
-        this.points = new ArrayList<>() {
-        };
+    public Forme(String nomForme, ArrayList<Vecteur> values, int nbRot) {
+        taille = values.size();
         nom = nomForme;
+        etat = new Vecteur[taille];
         rotation = origine = 0;
         nombreRotation = nbRot;
-        vecteurs[0, 0] = x1;
-        vecteurs[0, 1] = y1;
-        vecteurs[1, 0] = x2;
-        vecteurs[1, 1] = y2;
-        vecteurs[2, 0] = x3;
-        vecteurs[2, 1] = y3;
-        if (nbRot == 1) {
-            Points = new ArrayList<Vecteur[]>(generationPoints(vecteurs, nbRot));
+        for (int i = 0; i < taille; i++) {
+            etat[i] = values.get(i);
+        }
+        if (nbRot == 1 || nbRot == 0) {
+            points = generationPoints(etat, nbRot);
         } else {
-            Points = new ArrayList<Vecteur[]>(generationPoints(vecteurs, nbRot / 2));
+            points = generationPoints(etat, 2);
         }
     }
 
     //===========================================================
     private ArrayList<Vecteur<Integer>[]> generationPoints(Vecteur<Integer>[] vecteursForme, int typeRot) {
-        // rotations : (a;b) (-b;a) (-a;-b) (b;-a)
-        int rotation = 0, maxRot, i, j, k, temp;
-        Vecteur[] vec = new int[3,
-        2];
-            vec = vecteursForme;
-        ArrayList<Vecteur[]> listePoints = new ArrayList<Vecteur[]>();
-        maxRot = (typeRot < 1 ? 1 : 2 * typeRot);
-        Vecteur[] ens = new int[4, 2];
-            ens[0, 0] = 0;
-            ens[0
-        
-        
-        
-        
-        
-        , 1] = 0;
-            for (rotation = 0; rotation < maxRot; rotation++) {
-            for (k = 0; k < 1; k++) {
-                if (k == 0) {
-                    ens[0, 0] = 0;
-                        ens[0
-                  
-                  
-                  
-                  
-                  
-                  , 1] = 0;
+        // Rotations : (a;b) (-b;a) (-a;-b) (b;-a)
+        int i, j, k;
+        Vecteur<Integer>[] vec = new Vecteur[vecteursForme.length];
+        vec = vecteursForme.clone();
+        ArrayList<Vecteur<Integer>[]> listePoints = new ArrayList<>();
+        Vecteur[] ens = new Vecteur[vecteursForme.length + 1];
+        switch (typeRot) {
+            case 0:
+                for (k = 0; k < ens.length; k++) {
+                    if (k == 0) {
+                        ens[0].setValue(0, 0);
+                    } else {
+                        ens[0].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
                     }
-                    else
-                    {
-                        ens[0, 0] = -vec[k - 1, 0];
-                        ens[0, 1] = -vec[k - 1
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                , 1];
-                    }
-                    for (i = 0; i < 3; i++) {
-                    for (j = 0; j < 2; j++) {
-                        ens[i + 1, j] = vec[i, j]+ens[0,j
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-                ];
+                }
+                listePoints.add(ens);
+                break;
+            case 1:
+                for (i = 0; i < 2; i++) {
+                    for (k = 0; k < ens.length; k++) {
+                        if (k == 0) {
+                            ens[0].setValue(0, 0);
+                        } else {
+                            ens[0].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
                         }
                     }
-                    listePoints.Add(ens);
-                ens = new int[4
-            
-            
-            
-            
-            
-            
-            , 2];
+                    listePoints.add(ens);
+                    for (j = 0; j < vec.length; j++) {
+                        vec[j].setValue(-vec[j].get(0), -vec[j].get(1));
+                    }
                 }
-                    for (i = 0; i < 3; i++) {
-                temp = vec[i, 0];
-                        vec[i, 0] = -vec[i, 1];
-                        vec[i, 1] = temp;
-            }
-
+                break;
+            case 2:
+                for (i = 0; i < 4; i++) {
+                    for (k = 0; k < ens.length; k++) {
+                        if (k == 0) {
+                            ens[0].setValue(0, 0);
+                        } else {
+                            ens[0].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
+                        }
+                    }
+                    listePoints.add(ens);
+                    for (j = 0; j < vec.length; j++) {
+                        vec[j].setValue(-vec[j].get(1), vec[j].get(0));
+                    }
+                }
+                break;
         }
-
         return listePoints;
-    }
-
-    public bool videForme() {
-        int i, j;
-        for (i = 0; i < 3; i++) {
-            for (j = 0; j < 2; j++) {
-                if (vecteurs[i      {
-
-                },j
-                ] != 0) return false;
-            }
-        }
-        return true;
     }
 
     public static Forme Forme(int i) {
@@ -259,27 +211,56 @@ public class Forme {
     }
 
     public static Forme T() {
-        return new Forme("T", -1, 0, 0, 1, 1, 0, 4);
+        ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(-1, 0));
+        liste.add(new Vecteur(1, 0));
+        liste.add(new Vecteur(0, 1));
+
+        return new Forme("T", liste, 4);
     }
 
     public static Forme L() {
-        return new Forme("L", 1, 0, 0, 1, 0, 2, 4);
+        ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(0, 0));
+        liste.add(new Vecteur(0, 2));
+        liste.add(new Vecteur(0, 1));
+
+        return new Forme("L", liste, 4);
     }
 
     public static Forme J() {
-        return new Forme("J", -1, 0, 0, 1, 0, 2, 4);
+        ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(-1, 0));
+        liste.add(new Vecteur(0, 2));
+        liste.add(new Vecteur(0, 1));
+
+        return new Forme("J", liste, 4);
     }
 
     public static Forme C() {
-        return new Forme("C", 1, 0, 1, 1, 0, 1, 4);
+        ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(0, 1));
+        liste.add(new Vecteur(1, 0));
+        liste.add(new Vecteur(1, 1));
+
+        return new Forme("C", liste, 4);
     }
 
     public static Forme S() {
-        return new Forme("S", 1, 0, 1, 1, 2, 1, 4);
+        ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(1, 0));
+        liste.add(new Vecteur(1, 1));
+        liste.add(new Vecteur(2, 1));
+
+        return new Forme("S", liste, 4);
     }
 
     public static Forme Z() {
-        return new Forme("Z", 1, 0, 1, -1, 2, -1, 4);
+        ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(1, 0));
+        liste.add(new Vecteur(1, -1));
+        liste.add(new Vecteur(2, -1));
+
+        return new Forme("Z", liste, 4);
     }
-}
 }

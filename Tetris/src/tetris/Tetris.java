@@ -6,6 +6,8 @@
 
 package tetris;
 
+import tetris.Vue.Grid;
+
 /**
  *
  * @author Dimitri

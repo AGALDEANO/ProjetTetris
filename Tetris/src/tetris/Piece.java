@@ -6,6 +6,7 @@
 
 package tetris;
 
+import tetris.Vue.Case;
 import java.awt.Color;
 
 /**

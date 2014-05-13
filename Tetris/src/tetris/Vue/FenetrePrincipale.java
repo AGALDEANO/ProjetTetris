@@ -6,10 +6,10 @@
 
 package tetris.Vue;
 
+import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
-import tetris.Grid;
 
 /**
  *
@@ -17,26 +17,34 @@ import tetris.Grid;
  */
 public class FenetrePrincipale implements Observer {
     
-    private VueGrid grid;
+    private Grid grid;
     private VueScore score;
     private JFrame fenetre;
+    private JPanel pan;
 
     public FenetrePrincipale (){
-        grid= new VueGrid();
+        grid= new Grid();
         score= new VueScore();
         fenetre = new JFrame();
+        pan = new JPanel();
+        this.initFenetre();
+    }
+    
+    public FenetrePrincipale (int _ligne, int _colonne,int hzf){
+        grid= new Grid(_ligne, _colonne, hzf);
+        score= new VueScore();
+        fenetre = new JFrame();
+        pan = new JPanel();
+        this.initFenetre();
     }
     
     public void initFenetre (){
-        //Définit un titre pour notre fenêtre
-        fenetre.setTitle("Ma première fenêtre Java");
-        //Définit sa taille : 400 pixels de large et 100 pixels de haut
+        pan.setBackground(Color.BLACK);
+        fenetre.setContentPane(pan);
+        fenetre.setTitle("Tetris");
         fenetre.setSize(400, 100);
-        //Nous demandons maintenant à notre objet de se positionner au centre
         fenetre.setLocationRelativeTo(null);
-        //Termine le processus lorsqu'on clique sur la croix rouge
-        fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //Et enfin, la rendre visible        
+        fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);       
         fenetre.setVisible(true);
     }
     

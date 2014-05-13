@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package tetris;
+package tetris.Vue;
 
 import java.awt.Color;
 import java.awt.GridLayout;

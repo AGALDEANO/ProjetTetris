@@ -6,20 +6,14 @@
 
 package tetris.Vue;
 
-import tetris.Grid;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Dimitri
  */
-public class VueGrid {
-    private Grid grid;
-    
-    public VueGrid(){
-        grid = new Grid ();
-    }
-    
-    public VueGrid(int longueur, int largeur, int hzf){
-        grid = new Grid(longueur, largeur, hzf);
+public class Case extends JPanel{
+    public String ToString(){
+        return this.getBackground().toString();
     }
 }

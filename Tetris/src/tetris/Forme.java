@@ -156,31 +156,26 @@ public class Forme {
         // Rotations : (a;b) (-b;a) (-a;-b) (b;-a)
         int i, j, k;
         Vecteur<Integer>[] vec = new Vecteur[vecteursForme.length];
-        vec = vecteursForme.clone();
         ArrayList<Vecteur<Integer>[]> listePoints = new ArrayList<>();
         Vecteur[] ens = new Vecteur[vecteursForme.length + 1];
-        for (i = 0; i < ens.length; i++) {
+        ens[0] = new Vecteur();
+        for (i = 1; i < ens.length; i++) {
             ens[i] = new Vecteur();
+            vec[i - 1] = new Vecteur(vecteursForme[i - 1].get(0), vecteursForme[i - 1].get(1));
         }
         switch (typeRot) {
             case 0:
-                for (k = 0; k < ens.length; k++) {
-                    if (k == 0) {
-                        ens[0].setValue(0, 0);
-                    } else {
-                        ens[0].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
-                    }
+                ens[0].setValue(0, 0);
+                for (k = 1; k < ens.length; k++) {
+                    ens[k].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
                 }
-                listePoints.add(ens);
+                listePoints.add(ens.clone());
                 break;
             case 1:
                 for (i = 0; i < 2; i++) {
-                    for (k = 0; k < ens.length; k++) {
-                        if (k == 0) {
-                            ens[0].setValue(0, 0);
-                        } else {
-                            ens[0].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
-                        }
+                    ens[0].setValue(0, 0);
+                    for (k = 1; k < ens.length; k++) {
+                        ens[k].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
                     }
                     listePoints.add(ens);
                     for (j = 0; j < vec.length; j++) {
@@ -190,12 +185,9 @@ public class Forme {
                 break;
             case 2:
                 for (i = 0; i < 4; i++) {
-                    for (k = 0; k < ens.length; k++) {
-                        if (k == 0) {
-                            ens[0].setValue(0, 0);
-                        } else {
-                            ens[0].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
-                        }
+                    ens[0].setValue(0, 0);
+                    for (k = 1; k < ens.length; k++) {
+                        ens[k].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
                     }
                     listePoints.add(ens);
                     for (j = 0; j < vec.length; j++) {
@@ -259,7 +251,7 @@ public class Forme {
         liste.add(new Vecteur(1, 0));
         liste.add(new Vecteur(1, 1));
 
-        return new Forme("C", liste, 4);
+        return new Forme("C", liste, 0);
     }
 
     public static Forme S() {
@@ -268,7 +260,7 @@ public class Forme {
         liste.add(new Vecteur(1, 1));
         liste.add(new Vecteur(2, 1));
 
-        return new Forme("S", liste, 4);
+        return new Forme("S", liste, 2);
     }
 
     public static Forme Z() {
@@ -277,7 +269,7 @@ public class Forme {
         liste.add(new Vecteur(1, -1));
         liste.add(new Vecteur(2, -1));
 
-        return new Forme("Z", liste, 4);
+        return new Forme("Z", liste, 2);
     }
 
     @Override
@@ -285,10 +277,10 @@ public class Forme {
         try {
             Forme tempForme = clone();
             String str = "";
-            int minX, maxX, minY, maxY, k;
+            int minX, maxX, minY, maxY, i, j, k;
             Vecteur<Integer>[] tempTabVec;
-            tempTabVec = etat.clone();
-            int j = 0;
+            tempTabVec = getVecteurs();
+            j = 0;
             maxX = minX = tempTabVec[j].get(0);
             maxY = minY = tempTabVec[j].get(1);
             for (j = 1; j < tempTabVec.length; j++) {
@@ -297,7 +289,7 @@ public class Forme {
                 minY = (minY > tempTabVec[j].get(1) ? tempTabVec[j].get(1) : minY);
                 maxY = (maxY < tempTabVec[j].get(1) ? tempTabVec[j].get(1) : maxY);
             }
-            for (int i = minX; i <= maxX; i++) {
+            for (i = minX; i < maxX; i++) {
                 for (j = minY; j <= maxY; j++) {
                     for (k = 0; k < tempTabVec.length; k++) {
                         if (tempTabVec[k].get(0) == i) {
@@ -311,6 +303,17 @@ public class Forme {
                 }
                 str += '\n';
             }
+            for (j = minY; j <= maxY; j++) {
+                for (k = 0; k < tempTabVec.length; k++) {
+                    if (tempTabVec[k].get(0) == i) {
+                        str += '*';
+                        break;
+                    }
+                }
+                if (k == tempTabVec.length) {
+                    str += ' ';
+                }
+            }
             return str;
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(Forme.class.getName()).log(Level.SEVERE, null, ex);
@@ -320,6 +323,17 @@ public class Forme {
 
     @Override
     public Forme clone() throws CloneNotSupportedException {
-        return (Forme) super.clone();
+        Forme temp = new Forme();
+        temp.points = new ArrayList<>();
+        for (int i = 0; i < points.size(); i++) {
+            temp.points.add(points.get(i).clone());
+        }
+        temp.etat = etat.clone();
+        temp.taille = taille;
+        temp.origine = origine;
+        temp.rotation = rotation;
+        temp.nombreRotation = nombreRotation;
+        temp.nom = nom;
+        return temp;
     }
 }

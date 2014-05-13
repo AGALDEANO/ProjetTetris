@@ -35,11 +35,11 @@ public class Vecteur<T extends Number> {
     
     public T get(int i)
     {
-        return coordonnees.get(i&2);
+        return coordonnees.get(i&1);
     }
     public void set(T value, int i)
     {
-        coordonnees.set(i&2, value);
+        coordonnees.set(i&1, value);
     }
     
     

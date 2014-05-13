@@ -21,6 +21,12 @@ public class Vecteur<T extends Number> {
         coordonnees.add(x);
         coordonnees.add(y);
     }
+    public Vecteur()
+    {
+        T x = (T) Integer.valueOf(0), y = (T) Integer.valueOf(0);
+        coordonnees.add(x);
+        coordonnees.add(y);
+    }
     public void setValue(T x, T y)
     {
         coordonnees.set(0, x);
@@ -42,5 +48,4 @@ public class Vecteur<T extends Number> {
     {
         return new Vecteur<>(get(0), get(1));
     }
-    
 }

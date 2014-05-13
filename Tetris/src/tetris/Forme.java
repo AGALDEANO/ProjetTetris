@@ -6,6 +6,8 @@
 package tetris;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,15 +28,14 @@ public class Forme {
         return taille;
     }
 
-    public void rotCW()
-    {
-        setRotation(rotation+1);
+    public void rotCW() {
+        setRotation(rotation + 1);
     }
-    public void rotACW()
-    {
-        setRotation(rotation-1);
+
+    public void rotACW() {
+        setRotation(rotation - 1);
     }
-    
+
     public void setTaille(int taille) {
         taille = (taille < 1 ? 1 : taille);
         this.taille = taille;
@@ -98,19 +99,21 @@ public class Forme {
 
     public Forme() {
         taille = 3;
-        etat = new Vecteur[taille];
+        etat = new Vecteur[taille + 1];
 
         rotation = nombreRotation = origine = 0;
-        for (int i = 0; i < taille; i++) {
-            etat[i].set(0, i);
+        etat[0] = new Vecteur(0, 0);
+        for (int i = 1; i < taille + 1; i++) {
+            etat[i] = new Vecteur(0, i);
         }
     }
 
     public Forme(ArrayList<Vecteur> values) {
         taille = values.size();
-        etat = new Vecteur[taille];
+        etat = new Vecteur[taille + 1];
         rotation = nombreRotation = origine = 0;
-        for (int i = 0; i < taille; i++) {
+        etat[0] = new Vecteur(0, 0);
+        for (int i = 1; i < taille + 1; i++) {
             etat[i] = values.get(i);
         }
         points = generationPoints(etat, 0);
@@ -118,10 +121,11 @@ public class Forme {
 
     public Forme(ArrayList<Vecteur> values, int nbRot) {
         taille = values.size();
-        etat = new Vecteur[taille];
+        etat = new Vecteur[taille + 1];
         rotation = origine = 0;
         nombreRotation = nbRot;
-        for (int i = 0; i < taille; i++) {
+        etat[0] = new Vecteur(0, 0);
+        for (int i = 1; i < taille + 1; i++) {
             etat[i] = values.get(i);
         }
         if (nbRot == 1) {
@@ -155,6 +159,9 @@ public class Forme {
         vec = vecteursForme.clone();
         ArrayList<Vecteur<Integer>[]> listePoints = new ArrayList<>();
         Vecteur[] ens = new Vecteur[vecteursForme.length + 1];
+        for (i = 0; i < ens.length; i++) {
+            ens[i] = new Vecteur();
+        }
         switch (typeRot) {
             case 0:
                 for (k = 0; k < ens.length; k++) {
@@ -271,5 +278,48 @@ public class Forme {
         liste.add(new Vecteur(2, -1));
 
         return new Forme("Z", liste, 4);
+    }
+
+    @Override
+    public String toString() {
+        try {
+            Forme tempForme = clone();
+            String str = "";
+            int minX, maxX, minY, maxY, k;
+            Vecteur<Integer>[] tempTabVec;
+            tempTabVec = etat.clone();
+            int j = 0;
+            maxX = minX = tempTabVec[j].get(0);
+            maxY = minY = tempTabVec[j].get(1);
+            for (j = 1; j < tempTabVec.length; j++) {
+                minX = (minX > tempTabVec[j].get(0) ? tempTabVec[j].get(0) : minX);
+                maxX = (maxX < tempTabVec[j].get(0) ? tempTabVec[j].get(0) : maxX);
+                minY = (minY > tempTabVec[j].get(1) ? tempTabVec[j].get(1) : minY);
+                maxY = (maxY < tempTabVec[j].get(1) ? tempTabVec[j].get(1) : maxY);
+            }
+            for (int i = minX; i <= maxX; i++) {
+                for (j = minY; j <= maxY; j++) {
+                    for (k = 0; k < tempTabVec.length; k++) {
+                        if (tempTabVec[k].get(0) == i) {
+                            str += '*';
+                            break;
+                        }
+                    }
+                    if (k == tempTabVec.length) {
+                        str += ' ';
+                    }
+                }
+                str += '\n';
+            }
+            return str;
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Forme.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
+    public Forme clone() throws CloneNotSupportedException {
+        return (Forme) super.clone();
     }
 }

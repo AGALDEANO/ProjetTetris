@@ -15,35 +15,34 @@ import java.awt.Color;
  */
 public class Piece {
     private Forme forme;
-    private Case frame;
+    private Color frame;
     
     public Piece(int _forme, int _couleur){
         forme= Forme.Forme(_forme);
-        frame = new Case();
         switch (_couleur){
             case(1):
-                frame.setBackground(Color.RED);
+                frame=Color.RED;
                 break;
             case(2):
-                frame.setBackground(Color.BLUE);
+                frame=Color.BLUE;
                 break;
             case(3):
-                frame.setBackground(Color.YELLOW);
+                frame=Color.YELLOW;
                 break;
             case(4):
-                frame.setBackground(Color.GREEN);
+                frame=Color.GREEN;
                 break;
             case(5):
-                frame.setBackground(Color.ORANGE);
+                frame=Color.ORANGE;
                 break;
             case(6):
-                frame.setBackground(Color.MAGENTA);
+                frame=Color.MAGENTA;
                 break;
             case(7):
-                frame.setBackground(Color.GRAY);
+                frame=Color.GRAY;
                 break;
             default:
-                frame.setBackground(Color.BLACK);
+                frame=Color.BLACK;
                 break;
         }
     }
@@ -56,11 +55,11 @@ public class Piece {
         this.forme = forme;
     }
 
-    public Case getFrame() {
+    public Color getFrame() {
         return frame;
     }
 
-    public void setFrame(Case frame) {
+    public void setFrame(Color frame) {
         this.frame = frame;
     }
 }

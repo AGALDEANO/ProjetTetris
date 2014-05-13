@@ -6,7 +6,7 @@
 
 package tetris;
 
-import tetris.Vue.Grid;
+import tetris.Vue.*;
 
 /**
  *
@@ -14,13 +14,11 @@ import tetris.Vue.Grid;
  */
 public class Tetris extends Thread {
     
-    private int score;
-    private Grid grille;
+    private FenetrePrincipale fenetre;
     private Piece[] pieces;
     
     public Tetris (){
-        score=0;
-        grille=new Grid();
+        fenetre=new FenetrePrincipale();
         pieces = new Piece[7];
         for (int i= 1; i<=7; i++){
             pieces[i]=new Piece(i,i);

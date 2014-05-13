@@ -4,16 +4,16 @@
  * and open the template in the editor.
  */
 
-package tetris;
-
-import javax.swing.JPanel;
+package tetris.Vue;
 
 /**
  *
  * @author Dimitri
  */
-public class Case extends JPanel{
-    public String ToString(){
-        return this.getBackground().toString();
+public class VueScore {
+    private int score;
+    
+    public VueScore(){
+        score=0;
     }
 }

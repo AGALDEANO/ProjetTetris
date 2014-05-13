@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package tetris;
+package tetris.Vue;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -62,8 +62,9 @@ public class Grid extends JPanel{
         String res="";
         for (int i=0; i<ligne;i++){
             for (int j=0;j<colonne; j++){
-                res+=tableau[i][j].ToString();
+                res+=tableau[i][j].ToString()+' ';
             }
+            res+='\n';
         }
         return res;
     }

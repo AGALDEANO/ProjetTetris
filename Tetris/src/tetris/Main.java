@@ -5,9 +5,6 @@
  */
 package tetris;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author 4lexandre
@@ -15,10 +12,7 @@ import java.util.logging.Logger;
 public class Main {
 
     public static void main(String[] args) {
-        Forme temp;
-        String str;
-        temp = Forme.C();
-        str = temp.toString();
-        System.out.println(str);
+        Tetris tetris = new Tetris();
+        tetris.run();
     }
 }

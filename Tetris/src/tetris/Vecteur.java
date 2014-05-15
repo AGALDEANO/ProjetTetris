@@ -46,6 +46,6 @@ public class Vecteur<T extends Number> {
     @Override
     public Vecteur<T> clone() throws CloneNotSupportedException
     {
-        return new Vecteur<>(get(0), get(1));
+        return (Vecteur) super.clone();
     }
 }

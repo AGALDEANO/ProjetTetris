@@ -15,38 +15,34 @@ import java.util.logging.Logger;
  */
 public class Forme {
 
-    private ArrayList<Vecteur<Integer>[]> points;
     private Vecteur<Integer>[] etat;
-    private int taille;
-    private int origine;
-    private int rotation;
-    private int nombreRotation;
     private String nom;
 
     //===========================================================
-    public int getTaille() {
-        return taille;
-    }
-
     public void rotCW() {
-        setRotation(rotation + 1);
+        // Rotations : (a;b) (b;-a) (-a;-b) (-b;a)
+        for (int i = 0; i < etat.length; i++) {
+            etat[i].setValue(etat[i].get(1), -etat[i].get(0));
+        }
     }
 
     public void rotACW() {
-        setRotation(rotation - 1);
+        // Rotations : (a;b) (-b;a) (-a;-b) (b;-a)
+        for (int i = 0; i < etat.length; i++) {
+            etat[i].setValue(-etat[i].get(1), etat[i].get(0));
+        }
     }
 
-    public void setTaille(int taille) {
-        taille = (taille < 1 ? 1 : taille);
-        this.taille = taille;
+    public Vecteur<Integer>[] getPoints() {
+        return etat.clone();
     }
 
-    public ArrayList<Vecteur<Integer>[]> getPoints() {
-        return points;
+    public Vecteur<Integer> getPoints(int i) throws CloneNotSupportedException {
+        return etat[i].clone();
     }
 
-    public void setPoints(ArrayList<Vecteur<Integer>[]> value) {
-        points = value;
+    public void setPoints(Vecteur<Integer>[] value) {
+        etat = value;
     }
 
     public String getNom() {
@@ -57,146 +53,30 @@ public class Forme {
         nom = value;
     }
 
-    public Vecteur[] getEtat() {
-        return etat;
-    }
-
-    public Vecteur[] getVecteurs() {
-        return points.get(rotation);
-    }
-
-    public void setEtat(Vecteur[] value) {
-        etat = value;
-    }
-
-    public int getRotation() {
-        return rotation;
-
-    }
-
-    public void setRotation(int value) {
-        rotation = value;
-        rotation %= nombreRotation;
-    }
-
-    public int getNombreRotation() {
-        return nombreRotation;
-    }
-
-    public void setNombreRotation(int value) {
-        nombreRotation = (value < 0) ? 0 : value;
-    }
-
-    public int getOrigine() {
-        return origine;
-    }
-
-    public void setOrigine(int value) {
-
-        origine = value;
-        origine %= 4;
-    }
-
     public Forme() {
-        taille = 3;
-        etat = new Vecteur[taille + 1];
+    }
 
-        rotation = nombreRotation = origine = 0;
-        etat[0] = new Vecteur(0, 0);
-        for (int i = 1; i < taille + 1; i++) {
-            etat[i] = new Vecteur(0, i);
-        }
+    public Forme(Forme copy) {
+        etat = copy.getPoints();
+        nom = copy.getNom();
+
     }
 
     public Forme(ArrayList<Vecteur> values) {
-        taille = values.size();
-        etat = new Vecteur[taille + 1];
-        rotation = nombreRotation = origine = 0;
-        etat[0] = new Vecteur(0, 0);
-        for (int i = 1; i < taille + 1; i++) {
-            etat[i] = values.get(i);
-        }
-        points = generationPoints(etat, 0);
-    }
-
-    public Forme(ArrayList<Vecteur> values, int nbRot) {
-        taille = values.size();
-        etat = new Vecteur[taille + 1];
-        rotation = origine = 0;
-        nombreRotation = nbRot;
-        etat[0] = new Vecteur(0, 0);
-        for (int i = 1; i < taille + 1; i++) {
-            etat[i] = values.get(i);
-        }
-        if (nbRot == 1) {
-            points = generationPoints(etat, nbRot);
-        } else {
-            points = generationPoints(etat, nbRot / 2);
-        }
-    }
-
-    public Forme(String nomForme, ArrayList<Vecteur> values, int nbRot) {
-        taille = values.size();
-        nom = nomForme;
+        int taille = values.size();
         etat = new Vecteur[taille];
-        rotation = origine = 0;
-        nombreRotation = nbRot;
         for (int i = 0; i < taille; i++) {
             etat[i] = values.get(i);
         }
-        if (nbRot == 1 || nbRot == 0) {
-            points = generationPoints(etat, nbRot);
-        } else {
-            points = generationPoints(etat, 2);
-        }
     }
 
-    //===========================================================
-    private ArrayList<Vecteur<Integer>[]> generationPoints(Vecteur<Integer>[] vecteursForme, int typeRot) {
-        // Rotations : (a;b) (-b;a) (-a;-b) (b;-a)
-        int i, j, k;
-        Vecteur<Integer>[] vec = new Vecteur[vecteursForme.length];
-        ArrayList<Vecteur<Integer>[]> listePoints = new ArrayList<>();
-        Vecteur[] ens = new Vecteur[vecteursForme.length + 1];
-        ens[0] = new Vecteur();
-        for (i = 1; i < ens.length; i++) {
-            ens[i] = new Vecteur();
-            vec[i - 1] = new Vecteur(vecteursForme[i - 1].get(0), vecteursForme[i - 1].get(1));
+    public Forme(String nomValue, ArrayList<Vecteur> values) {
+        int taille = values.size();
+        etat = new Vecteur[taille];
+        for (int i = 0; i < taille; i++) {
+            etat[i] = values.get(i);
         }
-        switch (typeRot) {
-            case 0:
-                ens[0].setValue(0, 0);
-                for (k = 1; k < ens.length; k++) {
-                    ens[k].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
-                }
-                listePoints.add(ens.clone());
-                break;
-            case 1:
-                for (i = 0; i < 2; i++) {
-                    ens[0].setValue(0, 0);
-                    for (k = 1; k < ens.length; k++) {
-                        ens[k].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
-                    }
-                    listePoints.add(ens);
-                    for (j = 0; j < vec.length; j++) {
-                        vec[j].setValue(-vec[j].get(0), -vec[j].get(1));
-                    }
-                }
-                break;
-            case 2:
-                for (i = 0; i < 4; i++) {
-                    ens[0].setValue(0, 0);
-                    for (k = 1; k < ens.length; k++) {
-                        ens[k].setValue(vec[k - 1].get(0), vec[k - 1].get(1));
-                    }
-                    listePoints.add(ens);
-                    for (j = 0; j < vec.length; j++) {
-                        vec[j].setValue(-vec[j].get(1), vec[j].get(0));
-                    }
-                }
-                break;
-        }
-        return listePoints;
+        nom = nomValue;
     }
 
     public static Forme Forme(int i) {
@@ -213,6 +93,8 @@ public class Forme {
                 return Forme.S();
             case 5:
                 return Forme.Z();
+            case 6:
+                return Forme.Li();
             default:
                 return Forme.C();
         }
@@ -220,120 +102,108 @@ public class Forme {
 
     public static Forme T() {
         ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(-1, 0));
         liste.add(new Vecteur(1, 0));
         liste.add(new Vecteur(0, 1));
 
-        return new Forme("T", liste, 4);
+        return new Forme("T", liste);
+    }
+    public static Forme Li() {
+        ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(0, 0));
+        liste.add(new Vecteur(1, 0));
+        liste.add(new Vecteur(2, 0));
+        liste.add(new Vecteur(3, 0));
+
+        return new Forme("Li", liste);
     }
 
     public static Forme L() {
         ArrayList<Vecteur> liste = new ArrayList<>();
         liste.add(new Vecteur(0, 0));
+        liste.add(new Vecteur(1, 0));
         liste.add(new Vecteur(0, 2));
         liste.add(new Vecteur(0, 1));
 
-        return new Forme("L", liste, 4);
+        return new Forme("L", liste);
     }
 
     public static Forme J() {
         ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(-1, 0));
         liste.add(new Vecteur(0, 2));
         liste.add(new Vecteur(0, 1));
 
-        return new Forme("J", liste, 4);
+        return new Forme("J", liste);
     }
 
     public static Forme C() {
         ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(0, 1));
         liste.add(new Vecteur(1, 0));
         liste.add(new Vecteur(1, 1));
 
-        return new Forme("C", liste, 0);
+        return new Forme("C", liste);
     }
 
     public static Forme S() {
         ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(1, 0));
         liste.add(new Vecteur(1, 1));
         liste.add(new Vecteur(2, 1));
 
-        return new Forme("S", liste, 2);
+        return new Forme("S", liste);
     }
 
     public static Forme Z() {
         ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(1, 0));
         liste.add(new Vecteur(1, -1));
         liste.add(new Vecteur(2, -1));
 
-        return new Forme("Z", liste, 2);
+        return new Forme("Z", liste);
     }
 
     @Override
     public String toString() {
-        try {
-            Forme tempForme = clone();
-            String str = "";
-            int minX, maxX, minY, maxY, i, j, k;
-            Vecteur<Integer>[] tempTabVec;
-            tempTabVec = getVecteurs();
-            j = 0;
-            maxX = minX = tempTabVec[j].get(0);
-            maxY = minY = tempTabVec[j].get(1);
-            for (j = 1; j < tempTabVec.length; j++) {
-                minX = (minX > tempTabVec[j].get(0) ? tempTabVec[j].get(0) : minX);
-                maxX = (maxX < tempTabVec[j].get(0) ? tempTabVec[j].get(0) : maxX);
-                minY = (minY > tempTabVec[j].get(1) ? tempTabVec[j].get(1) : minY);
-                maxY = (maxY < tempTabVec[j].get(1) ? tempTabVec[j].get(1) : maxY);
-            }
-            for (i = minX; i < maxX; i++) {
-                for (j = minY; j <= maxY; j++) {
-                    for (k = 0; k < tempTabVec.length; k++) {
-                        if (tempTabVec[k].get(0) == i) {
-                            str += '*';
-                            break;
-                        }
-                    }
-                    if (k == tempTabVec.length) {
-                        str += ' ';
-                    }
-                }
-                str += '\n';
-            }
-            for (j = minY; j <= maxY; j++) {
-                for (k = 0; k < tempTabVec.length; k++) {
-                    if (tempTabVec[k].get(0) == i) {
-                        str += '*';
-                        break;
-                    }
-                }
-                if (k == tempTabVec.length) {
-                    str += ' ';
-                }
-            }
-            return str;
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(Forme.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+        String str = "";
+        byte[][] dataStr;
+        int minX, maxX, minY, maxY, i, j;
+        Vecteur<Integer>[] tempTabVec;
+        tempTabVec = getPoints();
+        j = 0;
+        maxX = minX = tempTabVec[j].get(0);
+        maxY = minY = tempTabVec[j].get(1);
+        for (j = 1; j < tempTabVec.length; j++) {
+            minX = (minX > tempTabVec[j].get(0) ? tempTabVec[j].get(0) : minX);
+            maxX = (maxX < tempTabVec[j].get(0) ? tempTabVec[j].get(0) : maxX);
+            minY = (minY > tempTabVec[j].get(1) ? tempTabVec[j].get(1) : minY);
+            maxY = (maxY < tempTabVec[j].get(1) ? tempTabVec[j].get(1) : maxY);
         }
-    }
-
-    @Override
-    public Forme clone() throws CloneNotSupportedException {
-        Forme temp = new Forme();
-        temp.points = new ArrayList<>();
-        for (int i = 0; i < points.size(); i++) {
-            temp.points.add(points.get(i).clone());
+        dataStr = new byte[maxY-minY+1][maxX-minX+1];
+        for (i = 0; i < dataStr.length; i++) {
+            for (j = 0; j < dataStr[i].length; j++) {
+                dataStr[i][j] = (byte) 0;
+            }
         }
-        temp.etat = etat.clone();
-        temp.taille = taille;
-        temp.origine = origine;
-        temp.rotation = rotation;
-        temp.nombreRotation = nombreRotation;
-        temp.nom = nom;
-        return temp;
+        for (j = 0; j < tempTabVec.length; j++) {
+            dataStr[tempTabVec[j].get(1) - minY][tempTabVec[j].get(0) - minX] = (byte) 10;
+        }
+        
+        for (i = dataStr.length-1; i >0 ; i--) {
+            for (j = 0; j < dataStr[i].length; j++) {
+                str += (char) (dataStr[i][j] + ' ');
+            }
+            str += '\n';
+        }
+        for (j = 0; j < dataStr[i].length; j++) {
+                str += (char) (dataStr[i][j] + ' ');
+            }
+        return str;
     }
 }

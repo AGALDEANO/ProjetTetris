@@ -12,7 +12,7 @@ package tetris;
 public class Main {
 
     public static void main(String[] args) {
-        Piece temp = new Piece(Forme._I);
-        System.out.println(temp.toString());
+        Tetris tetris = new Tetris();
+        tetris.run();
     }
 }

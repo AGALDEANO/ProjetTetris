@@ -21,7 +21,7 @@ public class Tetris extends Thread {
         fenetre=new FenetrePrincipale();
         pieces = new Piece[7];
         for (int i= 1; i<=7; i++){
-            pieces[i]=new Piece(i,i);
+            pieces[i-1]=new Piece(i,i);
         }
     }
     

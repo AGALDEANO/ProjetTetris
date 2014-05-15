@@ -17,6 +17,15 @@ public class Forme {
 
     private Vecteur<Integer>[] etat;
     private String nom;
+    private final byte videChar = ' ';
+    private final byte pleinChar = (byte) 0xDB;
+    public static final int _I = 1;
+    public static final int _O = 2;
+    public static final int _T = 3;
+    public static final int _L = 4;
+    public static final int _J = 5;
+    public static final int _Z = 6;
+    public static final int _S = 7;
 
     //===========================================================
     public void rotCW() {
@@ -81,42 +90,43 @@ public class Forme {
 
     public static Forme Forme(int i) {
         switch (i) {
-            case 0:
-                return Forme.C();
-            case 1:
+            case _T:
                 return Forme.T();
-            case 2:
+            case _L:
                 return Forme.L();
-            case 3:
+            case _J:
                 return Forme.J();
-            case 4:
+            case _S:
                 return Forme.S();
-            case 5:
+            case _Z:
                 return Forme.Z();
-            case 6:
-                return Forme.Li();
+            case _I:
+                return Forme.I();
+            case _O:
+                return Forme.O();
             default:
-                return Forme.C();
+                return Forme.O();
         }
     }
 
     public static Forme T() {
         ArrayList<Vecteur> liste = new ArrayList<>();
         liste.add(new Vecteur(0, 0));
-        liste.add(new Vecteur(-1, 0));
         liste.add(new Vecteur(1, 0));
-        liste.add(new Vecteur(0, 1));
+        liste.add(new Vecteur(2, 0));
+        liste.add(new Vecteur(1, 1));
 
         return new Forme("T", liste);
     }
-    public static Forme Li() {
+
+    public static Forme I() {
         ArrayList<Vecteur> liste = new ArrayList<>();
         liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(1, 0));
         liste.add(new Vecteur(2, 0));
         liste.add(new Vecteur(3, 0));
 
-        return new Forme("Li", liste);
+        return new Forme("I", liste);
     }
 
     public static Forme L() {
@@ -132,21 +142,21 @@ public class Forme {
     public static Forme J() {
         ArrayList<Vecteur> liste = new ArrayList<>();
         liste.add(new Vecteur(0, 0));
-        liste.add(new Vecteur(-1, 0));
-        liste.add(new Vecteur(0, 2));
-        liste.add(new Vecteur(0, 1));
+        liste.add(new Vecteur(1, 0));
+        liste.add(new Vecteur(2, 0));
+        liste.add(new Vecteur(2, 1));
 
         return new Forme("J", liste);
     }
 
-    public static Forme C() {
+    public static Forme O() {
         ArrayList<Vecteur> liste = new ArrayList<>();
         liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(0, 1));
         liste.add(new Vecteur(1, 0));
         liste.add(new Vecteur(1, 1));
 
-        return new Forme("C", liste);
+        return new Forme("O", liste);
     }
 
     public static Forme S() {
@@ -161,12 +171,28 @@ public class Forme {
 
     public static Forme Z() {
         ArrayList<Vecteur> liste = new ArrayList<>();
-        liste.add(new Vecteur(0, 0));
+        liste.add(new Vecteur(0, 1));
+        liste.add(new Vecteur(1, 1));
         liste.add(new Vecteur(1, 0));
-        liste.add(new Vecteur(1, -1));
-        liste.add(new Vecteur(2, -1));
+        liste.add(new Vecteur(2, 0));
 
         return new Forme("Z", liste);
+    }
+
+    public int[][] minMax() {
+        int minMaxValues[][] = new int[2][2], j; // [X/Y][Min/Max]
+        Vecteur<Integer>[] tempTabVec;
+        tempTabVec = getPoints();
+        j = 0;
+        minMaxValues[0][0] = minMaxValues[0][1] = tempTabVec[j].get(0);
+        minMaxValues[1][0] = minMaxValues[1][1] = tempTabVec[j].get(1);
+        for (j = 1; j < tempTabVec.length; j++) {
+            minMaxValues[0][0] = (minMaxValues[0][0] > tempTabVec[j].get(0) ? tempTabVec[j].get(0) : minMaxValues[0][0]);
+            minMaxValues[0][1] = (minMaxValues[0][1] < tempTabVec[j].get(0) ? tempTabVec[j].get(0) : minMaxValues[0][1]);
+            minMaxValues[1][0] = (minMaxValues[1][0] > tempTabVec[j].get(1) ? tempTabVec[j].get(1) : minMaxValues[1][0]);
+            minMaxValues[1][1] = (minMaxValues[1][1] < tempTabVec[j].get(1) ? tempTabVec[j].get(1) : minMaxValues[1][1]);
+        }
+        return minMaxValues;
     }
 
     @Override
@@ -176,34 +202,31 @@ public class Forme {
         int minX, maxX, minY, maxY, i, j;
         Vecteur<Integer>[] tempTabVec;
         tempTabVec = getPoints();
+        int minMaxValues[][] = minMax();
         j = 0;
-        maxX = minX = tempTabVec[j].get(0);
-        maxY = minY = tempTabVec[j].get(1);
-        for (j = 1; j < tempTabVec.length; j++) {
-            minX = (minX > tempTabVec[j].get(0) ? tempTabVec[j].get(0) : minX);
-            maxX = (maxX < tempTabVec[j].get(0) ? tempTabVec[j].get(0) : maxX);
-            minY = (minY > tempTabVec[j].get(1) ? tempTabVec[j].get(1) : minY);
-            maxY = (maxY < tempTabVec[j].get(1) ? tempTabVec[j].get(1) : maxY);
-        }
-        dataStr = new byte[maxY-minY+1][maxX-minX+1];
+        minX = minMaxValues[0][0];
+        maxX = minMaxValues[0][1];
+        minY = minMaxValues[1][0];
+        maxY = minMaxValues[1][1];
+        dataStr = new byte[maxY - minY + 1][maxX - minX + 1];
         for (i = 0; i < dataStr.length; i++) {
             for (j = 0; j < dataStr[i].length; j++) {
-                dataStr[i][j] = (byte) 0;
+                dataStr[i][j] = videChar;
             }
         }
         for (j = 0; j < tempTabVec.length; j++) {
-            dataStr[tempTabVec[j].get(1) - minY][tempTabVec[j].get(0) - minX] = (byte) 10;
+            dataStr[tempTabVec[j].get(1) - minY][tempTabVec[j].get(0) - minX] = pleinChar;
         }
-        
-        for (i = dataStr.length-1; i >0 ; i--) {
+
+        for (i = dataStr.length - 1; i > 0; i--) {
             for (j = 0; j < dataStr[i].length; j++) {
-                str += (char) (dataStr[i][j] + ' ');
+                str += (char) dataStr[i][j];
             }
             str += '\n';
         }
         for (j = 0; j < dataStr[i].length; j++) {
-                str += (char) (dataStr[i][j] + ' ');
-            }
+            str += (char) dataStr[i][j];
+        }
         return str;
     }
 }

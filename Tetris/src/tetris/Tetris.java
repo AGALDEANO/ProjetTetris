@@ -14,11 +14,11 @@ import tetris.Vue.*;
  */
 public class Tetris extends Thread {
     
-    private FenetrePrincipale fenetre;
+    private FenetreJeu fenetre;
     private Piece[] pieces;
     
     public Tetris (){
-        fenetre=new FenetrePrincipale();
+        fenetre=new FenetreJeu();
         pieces = new Piece[7];
         for (int i= 1; i<=7; i++){
             pieces[i-1]=new Piece(i,i);

@@ -111,6 +111,7 @@ public class Plateau implements java.lang.Runnable {
             
             update();
             if(i==5) fin = true;
+            i++;
         }
     }
 

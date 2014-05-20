@@ -19,7 +19,6 @@ import javax.swing.*;
  */
 public abstract class Vue extends JFrame implements ActionListener{
     private JPanel pan;
-    private JLabel titre;
     
     public Vue (){
         this.setTitle("Tetris");
@@ -31,12 +30,5 @@ public abstract class Vue extends JFrame implements ActionListener{
         pan = new JPanel();
         pan.setBackground(Color.BLACK);
         this.setContentPane(pan);
-        
-        titre = new JLabel("Tetris");
-        Font police = new Font("Arial", Font.BOLD, 100);
-        titre.setFont(police);
-        titre.setPreferredSize(new Dimension(800, 100));
-        titre.setHorizontalAlignment(JLabel.CENTER);
-        this.getContentPane().add(titre, BorderLayout.NORTH);
     }
 }

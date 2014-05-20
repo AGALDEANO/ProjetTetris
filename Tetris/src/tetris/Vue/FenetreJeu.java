@@ -7,7 +7,12 @@
 package tetris.Vue;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import tetris.*;
 
 /**
@@ -19,6 +24,7 @@ public class FenetreJeu extends Vue{
     private Grid grid;
     private Pieces pieces;
     private Plateau tab;
+    private JLabel titre;
     
     public FenetreJeu(){
         super();
@@ -27,6 +33,11 @@ public class FenetreJeu extends Vue{
         grid = new Grid(tab.getTailleY(),tab.getTailleX(),4);
         pieces = new Pieces(tab.getSuivantes(),tab.getSuivantes().length);
         
+        Icon icon = new ImageIcon(getClass().getResource("/images/tetris-logo.png"));
+        titre = new JLabel(icon);
+        titre.setPreferredSize(new Dimension(800, 150));
+        
+        this.getContentPane().add(titre, BorderLayout.EAST);
         this.getContentPane().add(score, BorderLayout.WEST);
         this.getContentPane().add(grid, BorderLayout.CENTER);
         this.getContentPane().add(pieces, BorderLayout.EAST);
@@ -35,7 +46,8 @@ public class FenetreJeu extends Vue{
     }
     
     public void updateGrid (){
-        Piece _piece = tab.nouvellePiece();
+        tab.nouvellePiece();
+        Piece _piece = tab.getCourante();
         pieces.nouvellePiece(_piece);
     }
     

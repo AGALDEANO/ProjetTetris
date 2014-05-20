@@ -33,7 +33,7 @@ public class Pieces extends ModeleGrid{
             }
         }
         for (Vecteur<Integer> point : points) {
-            this.setValueAt(_piece.getFrame(), n*4+3-point.get(1), point.get(0));
+            this.setValueAt(_piece.getFrame(), n*4+point.get(0)+2, point.get(1));
         }
     }
     

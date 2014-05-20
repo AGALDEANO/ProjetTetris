@@ -6,6 +6,7 @@
 package tetris;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +17,7 @@ import java.util.logging.Logger;
 public class Plateau implements java.lang.Runnable {
 
     private boolean pause = false;
+    private static final Random rand = new Random();
     private boolean fin = false;
     private Piece courante;
     private Piece[] suivantes;
@@ -29,11 +31,14 @@ public class Plateau implements java.lang.Runnable {
 
     public Plateau() {
         plateau = new int[tailleX][tailleY];
-        position = new Vecteur(3, 0);
-        positionReelle = new Vecteur(3f, 0f);
         vitesse = 1f;
         suivantes = new Piece[nombreSuivantes];
         courante = Piece.randPiece();
+        int[][] minMax = courante.getForme().minMax();
+        int randY;
+        randY = rand.nextInt(tailleY - (minMax[1][1] - minMax[1][0]));
+        position = new Vecteur(0, randY);
+        positionReelle = new Vecteur(position.get(0).floatValue(), position.get(1).floatValue());
         for (int i = 0; i < suivantes.length; i++) {
             suivantes[i] = Piece.randPiece();
         }
@@ -46,8 +51,11 @@ public class Plateau implements java.lang.Runnable {
             suivantes[i] = suivantes[i + 1];
         }
         suivantes[i] = Piece.randPiece();
-        position = new Vecteur(3, 0);
-        positionReelle = new Vecteur(3f, 0f);
+        int[][] minMax = courante.getForme().minMax();
+        int randY;
+        randY = rand.nextInt(tailleY - (minMax[1][1] - minMax[1][0]));
+        position = new Vecteur(0, randY);
+        positionReelle = new Vecteur(position.get(0).floatValue(), position.get(1).floatValue());
         vitesse = 1f;
     }
 
@@ -55,10 +63,10 @@ public class Plateau implements java.lang.Runnable {
         boolean colision = false;
         Vecteur<Integer> temp = new Vecteur();
         int DX;
-        DX = (int) (positionReelle.get(0)+vitesse) - position.get(0);
+        DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
         if (DX != 0) {
             for (int i = 0; i < courante.getForme().getPoints().length; i++) {
-                temp.setValue(getVecteur(i).get(0).intValue()+DX, getVecteur(i).get(1).intValue());
+                temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue());
                 if (!isEmpty(temp)) {
                     colision = true;
                     break;
@@ -66,7 +74,7 @@ public class Plateau implements java.lang.Runnable {
             }
         }
         if (!colision) {
-            positionReelle.set(positionReelle.get(0)+vitesse, 0);
+            positionReelle.set(positionReelle.get(0) + vitesse, 0);
         }
         return colision;
     }
@@ -76,7 +84,11 @@ public class Plateau implements java.lang.Runnable {
     }
 
     public boolean isEmpty(Vecteur<Integer> Vec) {
-        return isIn(Vec);
+        if (isIn(Vec)) {
+            return plateau[Vec.get(0)][Vec.get(1)] == 0;
+        } else {
+            return false;
+        }
     }
 
     void pause() {
@@ -91,7 +103,9 @@ public class Plateau implements java.lang.Runnable {
     @Override
     public void run() {
         int i = 0;
+        drawCourante();
         while (!fin) {
+            System.out.println(toString());
             if (pause) {
                 try {
                     wait();
@@ -100,7 +114,7 @@ public class Plateau implements java.lang.Runnable {
                 }
             }
             update();
-            if (i == 5) {
+            if (i == 100) {
                 fin = true;
             }
             i++;
@@ -111,6 +125,9 @@ public class Plateau implements java.lang.Runnable {
 
     public int[] update() {
         eraseCourante();
+        if (rand.nextInt(4) == 0) {
+            courante.rotCW();
+        }
         if (updatePosition()) {
             drawCourante();
             int[] lines = checkLines();
@@ -118,6 +135,8 @@ public class Plateau implements java.lang.Runnable {
             nouvellePiece();
             drawCourante();
             return lines;
+        } else {
+            position.setValue(positionReelle.get(0).intValue(), positionReelle.get(1).intValue());
         }
         drawCourante();
         return null;
@@ -141,9 +160,15 @@ public class Plateau implements java.lang.Runnable {
 
     private void deleteLine(int i) {
         int j, k;
-        for (j = 0; j < tailleX; j++) {
-            for (k = i; k < tailleY - 1; k++) {
-                plateau[k][j] = plateau[k + 1][j];
+        if (i == 0) {
+            for (j = 0; j < tailleY; j++) {
+                plateau[0][j] = 0;
+            }
+        } else {
+            for (j = 0; j < tailleY; j++) {
+                for (k = i; k > 0; k--) {
+                    plateau[k][j] = plateau[k - 1][j];
+                }
             }
         }
     }
@@ -160,14 +185,14 @@ public class Plateau implements java.lang.Runnable {
     private int[] checkLines() {
         ArrayList<Integer> temp = new ArrayList<>();
         int i, j, k;
-        for (i = 0; i < tailleY; i++) {
+        for (i = tailleX - 1; i > 0; i--) {
             k = 0;
-            for (j = 0; j < tailleX; j++) {
+            for (j = 0; j < tailleY; j++) {
                 if (plateau[i][j] != 0) {
                     k++;
                 }
             }
-            if (k == tailleX) {
+            if (k == tailleY) {
                 temp.add(i);
             }
             if (k == 0) {
@@ -213,17 +238,33 @@ public class Plateau implements java.lang.Runnable {
     @Override
     public String toString() {
         int i, j;
-        String str = "";
+        String str = "  ";
+        for (j = 0; j < tailleY; j++) {
+            str += j % 10;
+        }
+        str += "\n .";
+        for (j = 0; j < tailleY; j++) {
+            str += '-';
+        }
+        str += ".\n";
+
         for (i = 0; i < tailleX; i++) {
+            str += i % 10;
+            str += "|";
             for (j = 0; j < tailleY; j++) {
-                if (plateau[i][tailleY - j - 1] != 0) {
+                if (plateau[i][j] != 0) {
                     str += '*';
                 } else {
                     str += ' ';
                 }
             }
-            str += '\n';
+            str += "|\n";
         }
+        str += " '";
+        for (j = 0; j < tailleY; j++) {
+            str += '-';
+        }
+        str += '\'';
         return str;
     }
 }

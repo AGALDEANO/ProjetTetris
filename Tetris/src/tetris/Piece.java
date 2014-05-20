@@ -106,6 +106,15 @@ public class Piece {
         return new Piece(rand.nextInt(nombrePieces)+1);
     }
    
+    public void rotCW()
+    {
+        forme.rotCW();
+    }
+    public void rotACW()
+    {
+        forme.rotACW();
+    }
+    
     @Override
     public String toString() {
         String str = "========== "

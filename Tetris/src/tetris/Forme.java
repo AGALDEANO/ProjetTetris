@@ -48,7 +48,7 @@ public class Forme {
         return temp;
     }
 
-    public Vecteur<Integer> getPoints(int i) throws CloneNotSupportedException {
+    public Vecteur<Integer> getPoints(int i) {
         return new Vecteur(etat[i]);
     }
 

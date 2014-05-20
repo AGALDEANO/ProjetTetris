@@ -22,46 +22,64 @@ public class Piece {
     
     public Piece(int _forme, int _couleur){
         forme= Forme.Forme(_forme);
+        idColor=_couleur;
         switch (_forme){
             case(Forme._T):
                 frame=Color.MAGENTA;
-                idColor=Forme._T;
                 break;
             case(Forme._S):
                 frame=Color.GREEN;
-                idColor=Forme._T;
                 break;
             case(Forme._Z):
                 frame=Color.RED;
-                idColor=Forme._T;
                 break;
             case(Forme._L):
                 frame=Color.ORANGE;
-                idColor=Forme._T;
                 break;
             case(Forme._J):
                 frame=Color.BLUE;
-                idColor=Forme._T;
                 break;
             case(Forme._I):
                 frame=Color.CYAN;
-                idColor=Forme._T;
                 break;
             case(Forme._O):
                 frame=Color.YELLOW;
-                idColor=Forme._T;
                 break;
             default:
                 frame=Color.YELLOW;
-                idColor=Forme._T;
                 break;
         }
     }
 
     public Piece(int _forme){
-        Piece temp = new Piece(_forme, _forme);
-        forme = temp.forme;
-        frame = temp.frame;
+        forme= Forme.Forme(_forme);
+        idColor=_forme;
+        switch (_forme){
+            case(Forme._T):
+                frame=Color.MAGENTA;
+                break;
+            case(Forme._S):
+                frame=Color.GREEN;
+                break;
+            case(Forme._Z):
+                frame=Color.RED;
+                break;
+            case(Forme._L):
+                frame=Color.ORANGE;
+                break;
+            case(Forme._J):
+                frame=Color.BLUE;
+                break;
+            case(Forme._I):
+                frame=Color.CYAN;
+                break;
+            case(Forme._O):
+                frame=Color.YELLOW;
+                break;
+            default:
+                frame=Color.YELLOW;
+                break;
+        }
     }
     
     public Forme getForme() {

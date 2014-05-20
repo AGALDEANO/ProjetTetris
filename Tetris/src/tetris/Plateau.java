@@ -23,14 +23,14 @@ public class Plateau implements java.lang.Runnable {
     private Float vitesse;
     private Vecteur<Float> positionReelle;
     private int[][] plateau;
-    private int tailleX = 10;
-    private int tailleY = 20;
+    private int tailleX = 20;
+    private int tailleY = 10;
     private int nombreSuivantes = 3;
 
     public Plateau() {
-        plateau = new int[tailleY][tailleX];
-        position = new Vecteur(3, 12);
-        positionReelle = new Vecteur(3f, 12f);
+        plateau = new int[tailleX][tailleY];
+        position = new Vecteur(3, 0);
+        positionReelle = new Vecteur(3f, 0f);
         vitesse = 1f;
         suivantes = new Piece[nombreSuivantes];
         courante = Piece.randPiece();
@@ -46,28 +46,19 @@ public class Plateau implements java.lang.Runnable {
             suivantes[i] = suivantes[i + 1];
         }
         suivantes[i] = Piece.randPiece();
-        position = new Vecteur(3, 12);
-        positionReelle = new Vecteur(3f, 12f);
+        position = new Vecteur(3, 0);
+        positionReelle = new Vecteur(3f, 0f);
         vitesse = 1f;
     }
 
     public boolean updatePosition() {
         boolean colision = false;
         Vecteur<Integer> temp = new Vecteur();
-        float y, dy;
-        int Y, DY;
-        y = positionReelle.get(1);
-        dy = -vitesse;
-        y += dy;
-        Y = (int) y;
-        DY = Y - position.get(1);
-        if (DY != 0) {
+        int DX;
+        DX = (int) (positionReelle.get(0)+vitesse) - position.get(0);
+        if (DX != 0) {
             for (int i = 0; i < courante.getForme().getPoints().length; i++) {
-                try {
-                    temp.setValue(courante.getForme().getPoints(i).get(0), courante.getForme().getPoints(i).get(1) + DY);
-                } catch (CloneNotSupportedException ex) {
-                    Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                temp.setValue(getVecteur(i).get(0).intValue()+DX, getVecteur(i).get(1).intValue());
                 if (!isEmpty(temp)) {
                     colision = true;
                     break;
@@ -75,7 +66,7 @@ public class Plateau implements java.lang.Runnable {
             }
         }
         if (!colision) {
-            positionReelle.set(y, 1);
+            positionReelle.set(positionReelle.get(0)+vitesse, 0);
         }
         return colision;
     }
@@ -99,7 +90,7 @@ public class Plateau implements java.lang.Runnable {
 
     @Override
     public void run() {
-        int i=0;
+        int i = 0;
         while (!fin) {
             if (pause) {
                 try {
@@ -108,20 +99,27 @@ public class Plateau implements java.lang.Runnable {
                     Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
             update();
-            if(i==5) fin = true;
+            if (i == 5) {
+                fin = true;
+            }
             i++;
         }
+        System.out.println(toString());
+
     }
 
     public int[] update() {
+        eraseCourante();
         if (updatePosition()) {
-            nouvellePiece();
+            drawCourante();
             int[] lines = checkLines();
             deleteLines(lines);
+            nouvellePiece();
+            drawCourante();
             return lines;
         }
+        drawCourante();
         return null;
     }
 
@@ -129,11 +127,7 @@ public class Plateau implements java.lang.Runnable {
         Forme temp = courante.getForme();
         int taille = temp.getPoints().length;
         for (int i = 0; i < taille; i++) {
-            try {
-                plateau[temp.getPoints(i).get(1)][temp.getPoints(i).get(0)] = 0;
-            } catch (CloneNotSupportedException ex) {
-                Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            plateau[getVecteur(i).get(0).intValue()][getVecteur(i).get(1).intValue()] = 0;
         }
     }
 
@@ -141,11 +135,7 @@ public class Plateau implements java.lang.Runnable {
         Forme temp = courante.getForme();
         int taille = temp.getPoints().length;
         for (int i = 0; i < taille; i++) {
-            try {
-                plateau[temp.getPoints(i).get(1)][temp.getPoints(i).get(0)] = courante.getIdColor();
-            } catch (CloneNotSupportedException ex) {
-                Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            plateau[getVecteur(i).get(0).intValue()][getVecteur(i).get(1).intValue()] = courante.getIdColor();
         }
     }
 
@@ -160,7 +150,6 @@ public class Plateau implements java.lang.Runnable {
 
     private void deleteLines(int[] indices) {
         if (indices != null) {
-            eraseCourante();
             for (int i = 0; i < indices.length; i++) {
                 deleteLine(i);
             }
@@ -214,5 +203,27 @@ public class Plateau implements java.lang.Runnable {
 
     public Piece getCourante() {
         return courante;
+    }
+
+    public Vecteur getVecteur(int i) {
+
+        return new Vecteur(courante.getForme().getPoints(i).get(0) + position.get(0), courante.getForme().getPoints(i).get(1) + position.get(1));
+    }
+
+    @Override
+    public String toString() {
+        int i, j;
+        String str = "";
+        for (i = 0; i < tailleX; i++) {
+            for (j = 0; j < tailleY; j++) {
+                if (plateau[i][tailleY - j - 1] != 0) {
+                    str += '*';
+                } else {
+                    str += ' ';
+                }
+            }
+            str += '\n';
+        }
+        return str;
     }
 }

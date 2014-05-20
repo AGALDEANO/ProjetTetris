@@ -51,5 +51,16 @@ public class Grid extends ModeleGrid{
         }
         return res;
     }
+    
+    public void updateGrid(Color[][]plateau){
+        tableau=plateau;
+        for (int i=0; i<this.getRowCount()+hauteurZoneFantome;i++){
+            for (int j=0;j<this.getColumnCount(); j++){
+                if (i>=hauteurZoneFantome){
+                    this.setValueAt(tableau[i][j], i-hauteurZoneFantome, j);
+                }
+            }
+        }
+    }
 }
 

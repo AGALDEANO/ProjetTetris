@@ -37,13 +37,11 @@ public class Pieces extends ModeleGrid{
         }
     }
     
-    public void nouvellePiece(Piece _piece){
+    public void updatePiece(Piece[] _piece){
         int i;
-        for (i=0; i<piece.length-1;i++){
-            piece[i]=piece[i+1];
+        piece=_piece;
+        for (i=0; i<piece.length;i++){
             createPiece(piece[i],i);
         }
-        piece[i]=_piece;
-        createPiece(piece[i],i);
     }
 }

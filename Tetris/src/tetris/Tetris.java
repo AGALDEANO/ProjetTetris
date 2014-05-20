@@ -18,7 +18,8 @@ public class Tetris extends Thread {
     private Piece[] pieces;
     
     public Tetris (){
-        fenetre=new FenetreJeu();
+        Plateau plateau = new Plateau();
+        fenetre=new FenetreJeu(plateau);
         pieces = new Piece[7];
         for (int i= 1; i<=7; i++){
             pieces[i-1]=new Piece(i,i);
@@ -27,6 +28,7 @@ public class Tetris extends Thread {
     
     @Override
     public void run(){
-        
+        while (true){
+        }
     }
 }

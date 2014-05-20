@@ -7,8 +7,8 @@
 package tetris.Vue;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -23,15 +23,13 @@ public class FenetreJeu extends Vue{
     private Score score;
     private Grid grid;
     private Pieces pieces;
-    private Plateau tab;
     private JLabel titre;
     
-    public FenetreJeu(){
+    public FenetreJeu(Plateau plateau){
         super();
         score = new Score();
-        tab = new Plateau();
-        grid = new Grid(tab.getTailleX(),tab.getTailleY(),2);
-        pieces = new Pieces(tab.getSuivantes(),tab.getSuivantes().length);
+        grid = new Grid(plateau.getTailleX(),plateau.getTailleY(),2);
+        pieces = new Pieces(plateau.getSuivantes(),plateau.getSuivantes().length);
         
         Icon icon = new ImageIcon(getClass().getResource("/images/tetris-logo.png"));
         titre = new JLabel(icon);
@@ -45,10 +43,16 @@ public class FenetreJeu extends Vue{
         this.setVisible(true);
     }
     
-    public void updateGrid (){
-        tab.nouvellePiece();
-        Piece _piece = tab.getCourante();
-        pieces.nouvellePiece(_piece);
+    public void updateGrid (Plateau plateau){
+        Color[][] tab = new Color [plateau.getTailleX()][plateau.getTailleY()];
+        
+        for (int i=0; i<plateau.getTailleX();i++){
+            for (int j=0; j<plateau.getTailleY();j++){
+                tab[i][j]=Piece.getColor(plateau.getPlateau()[i][j]);
+            }
+        }
+        grid.updateGrid(tab);
+        pieces.updatePiece(plateau.getSuivantes());
     }
     
     @Override

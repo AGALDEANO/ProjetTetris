@@ -23,38 +23,36 @@ public class Piece {
     public Piece(int _forme, int _couleur){
         forme= Forme.Forme(_forme);
         idColor=_couleur;
-        switch (_forme){
-            case(Forme._T):
-                frame=Color.MAGENTA;
-                break;
-            case(Forme._S):
-                frame=Color.GREEN;
-                break;
-            case(Forme._Z):
-                frame=Color.RED;
-                break;
-            case(Forme._L):
-                frame=Color.ORANGE;
-                break;
-            case(Forme._J):
-                frame=Color.BLUE;
-                break;
-            case(Forme._I):
-                frame=Color.CYAN;
-                break;
-            case(Forme._O):
-                frame=Color.YELLOW;
-                break;
-            default:
-                frame=Color.YELLOW;
-                break;
-        }
+        setFrame(_couleur);
     }
 
     public Piece(int _forme){
         forme= Forme.Forme(_forme);
         idColor=_forme;
-        switch (_forme){
+        setFrame(_forme);
+    }
+    
+    public Forme getForme() {
+        return forme;
+    }
+
+    public void setForme(Forme forme) {
+        this.forme = forme;
+    }
+
+    public Color getFrame() {
+        return frame;
+    }
+    public int getIdColor() {
+        return idColor;
+    }
+
+    public void setFrame(Color frame) {
+        this.frame = frame;
+    }
+    
+    public void setFrame (int couleur){
+        switch (couleur){
             case(Forme._T):
                 frame=Color.MAGENTA;
                 break;
@@ -82,23 +80,25 @@ public class Piece {
         }
     }
     
-    public Forme getForme() {
-        return forme;
-    }
-
-    public void setForme(Forme forme) {
-        this.forme = forme;
-    }
-
-    public Color getFrame() {
-        return frame;
-    }
-    public int getIdColor() {
-        return idColor;
-    }
-
-    public void setFrame(Color frame) {
-        this.frame = frame;
+    public static Color getColor(int couleur){
+        switch (couleur){
+            case(Forme._T):
+                return Color.MAGENTA;
+            case(Forme._S):
+                return Color.GREEN;
+            case(Forme._Z):
+                return Color.RED;
+            case(Forme._L):
+                return Color.ORANGE;
+            case(Forme._J):
+                return Color.BLUE;
+            case(Forme._I):
+                return Color.CYAN;
+            case(Forme._O):
+                return Color.YELLOW;
+            default:
+                return Color.YELLOW;
+        }
     }
     
     public static Piece randPiece()

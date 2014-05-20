@@ -113,10 +113,10 @@ public class Forme {
 
     public static Forme T() {
         ArrayList<Vecteur> liste = new ArrayList<>();
-        liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(1, 0));
-        liste.add(new Vecteur(2, 0));
         liste.add(new Vecteur(1, 1));
+        liste.add(new Vecteur(1, 2));
+        liste.add(new Vecteur(0, 1));
 
         return new Forme("T", liste);
     }
@@ -124,29 +124,29 @@ public class Forme {
     public static Forme I() {
         ArrayList<Vecteur> liste = new ArrayList<>();
         liste.add(new Vecteur(0, 0));
-        liste.add(new Vecteur(1, 0));
-        liste.add(new Vecteur(2, 0));
-        liste.add(new Vecteur(3, 0));
+        liste.add(new Vecteur(0, 1));
+        liste.add(new Vecteur(0, 2));
+        liste.add(new Vecteur(0, 3));
 
         return new Forme("I", liste);
     }
 
     public static Forme L() {
         ArrayList<Vecteur> liste = new ArrayList<>();
-        liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(1, 0));
+        liste.add(new Vecteur(1, 1));
+        liste.add(new Vecteur(1, 2));
         liste.add(new Vecteur(0, 2));
-        liste.add(new Vecteur(0, 1));
 
         return new Forme("L", liste);
     }
 
     public static Forme J() {
         ArrayList<Vecteur> liste = new ArrayList<>();
-        liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(1, 0));
-        liste.add(new Vecteur(2, 0));
-        liste.add(new Vecteur(2, 1));
+        liste.add(new Vecteur(1, 1));
+        liste.add(new Vecteur(1, 2));
+        liste.add(new Vecteur(0, 0));
 
         return new Forme("J", liste);
     }
@@ -163,19 +163,19 @@ public class Forme {
 
     public static Forme S() {
         ArrayList<Vecteur> liste = new ArrayList<>();
-        liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(1, 0));
         liste.add(new Vecteur(1, 1));
-        liste.add(new Vecteur(2, 1));
+        liste.add(new Vecteur(0, 1));
+        liste.add(new Vecteur(0, 2));
 
         return new Forme("S", liste);
     }
 
     public static Forme Z() {
         ArrayList<Vecteur> liste = new ArrayList<>();
-        liste.add(new Vecteur(0, 1));
+        liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(1, 1));
-        liste.add(new Vecteur(1, 0));
+        liste.add(new Vecteur(0, 1));
         liste.add(new Vecteur(2, 0));
 
         return new Forme("Z", liste);

@@ -29,6 +29,9 @@ public class Plateau implements java.lang.Runnable {
 
     public Plateau() {
         plateau = new int[tailleY][tailleX];
+        position = new Vecteur(3, 12);
+        positionReelle = new Vecteur(3f, 12f);
+        vitesse = 1f;
         suivantes = new Piece[nombreSuivantes];
         courante = Piece.randPiece();
         for (int i = 0; i < suivantes.length; i++) {
@@ -43,6 +46,9 @@ public class Plateau implements java.lang.Runnable {
             suivantes[i] = suivantes[i + 1];
         }
         suivantes[i] = Piece.randPiece();
+        position = new Vecteur(3, 12);
+        positionReelle = new Vecteur(3f, 12f);
+        vitesse = 1f;
     }
 
     public boolean updatePosition() {
@@ -55,7 +61,7 @@ public class Plateau implements java.lang.Runnable {
         y += dy;
         Y = (int) y;
         DY = Y - position.get(1);
-        if (DY!=0) {
+        if (DY != 0) {
             for (int i = 0; i < courante.getForme().getPoints().length; i++) {
                 try {
                     temp.setValue(courante.getForme().getPoints(i).get(0), courante.getForme().getPoints(i).get(1) + DY);
@@ -68,8 +74,7 @@ public class Plateau implements java.lang.Runnable {
                 }
             }
         }
-        if(!colision)
-        {
+        if (!colision) {
             positionReelle.set(y, 1);
         }
         return colision;
@@ -94,46 +99,100 @@ public class Plateau implements java.lang.Runnable {
 
     @Override
     public void run() {
+        int i=0;
+        while (!fin) {
+            if (pause) {
+                try {
+                    wait();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            update();
+            if(i==5) fin = true;
+        }
+    }
 
-        if (pause) {
+    public int[] update() {
+        if (updatePosition()) {
+            nouvellePiece();
+            int[] lines = checkLines();
+            deleteLines(lines);
+            return lines;
+        }
+        return null;
+    }
+
+    private void eraseCourante() {
+        Forme temp = courante.getForme();
+        int taille = temp.getPoints().length;
+        for (int i = 0; i < taille; i++) {
             try {
-                wait();
-            } catch (InterruptedException ex) {
+                plateau[temp.getPoints(i).get(1)][temp.getPoints(i).get(0)] = 0;
+            } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    private int[] checkLines()
-    {
+    private void drawCourante() {
+        Forme temp = courante.getForme();
+        int taille = temp.getPoints().length;
+        for (int i = 0; i < taille; i++) {
+            try {
+                plateau[temp.getPoints(i).get(1)][temp.getPoints(i).get(0)] = courante.getIdColor();
+            } catch (CloneNotSupportedException ex) {
+                Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void deleteLine(int i) {
+        int j, k;
+        for (j = 0; j < tailleX; j++) {
+            for (k = i; k < tailleY - 1; k++) {
+                plateau[k][j] = plateau[k + 1][j];
+            }
+        }
+    }
+
+    private void deleteLines(int[] indices) {
+        if (indices != null) {
+            eraseCourante();
+            for (int i = 0; i < indices.length; i++) {
+                deleteLine(i);
+            }
+            drawCourante();
+        }
+    }
+
+    private int[] checkLines() {
         ArrayList<Integer> temp = new ArrayList<>();
         int i, j, k;
-        for(i=0;i<tailleY;i++)
-        {
-            k=0;
-            for(j=0;j<tailleX;j++)
-            {
-                if(plateau[i][j]!=0) k++;
+        for (i = 0; i < tailleY; i++) {
+            k = 0;
+            for (j = 0; j < tailleX; j++) {
+                if (plateau[i][j] != 0) {
+                    k++;
+                }
             }
-            if(k==tailleX) temp.add(i);
-            if(k==0) break;
+            if (k == tailleX) {
+                temp.add(i);
+            }
+            if (k == 0) {
+                break;
+            }
         }
-        if(temp.isEmpty()) return null;
+        if (temp.isEmpty()) {
+            return null;
+        }
         int[] lines = new int[temp.size()];
-        for(i=0;i<lines.length;i++)
-        {
-            lines[i]=temp.get(i);
+        for (i = 0; i < lines.length; i++) {
+            lines[i] = temp.get(i);
         }
         return lines;
-        
+
     }
-    
-    public int[] update() {
-        if(updatePosition())
-        {
-            nouvellePiece();
-            return checkLines();
-        }
-        return null;
-    }
+
 }

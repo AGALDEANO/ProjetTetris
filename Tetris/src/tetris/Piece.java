@@ -16,6 +16,7 @@ import java.util.Random;
 public class Piece {
     private Forme forme;
     private Color frame;
+    private int idColor;
     private static final Random rand = new Random();
     private static final int nombrePieces = 7;
     
@@ -24,27 +25,35 @@ public class Piece {
         switch (_forme){
             case(Forme._T):
                 frame=Color.MAGENTA;
+                idColor=Forme._T;
                 break;
             case(Forme._S):
                 frame=Color.GREEN;
+                idColor=Forme._T;
                 break;
             case(Forme._Z):
                 frame=Color.RED;
+                idColor=Forme._T;
                 break;
             case(Forme._L):
                 frame=Color.ORANGE;
+                idColor=Forme._T;
                 break;
             case(Forme._J):
                 frame=Color.BLUE;
+                idColor=Forme._T;
                 break;
             case(Forme._I):
                 frame=Color.CYAN;
+                idColor=Forme._T;
                 break;
             case(Forme._O):
                 frame=Color.YELLOW;
+                idColor=Forme._T;
                 break;
             default:
                 frame=Color.YELLOW;
+                idColor=Forme._T;
                 break;
         }
     }
@@ -65,6 +74,9 @@ public class Piece {
 
     public Color getFrame() {
         return frame;
+    }
+    public int getIdColor() {
+        return idColor;
     }
 
     public void setFrame(Color frame) {

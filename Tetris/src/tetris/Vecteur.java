@@ -21,6 +21,11 @@ public class Vecteur<T extends Number> {
         coordonnees.add(x);
         coordonnees.add(y);
     }
+    public Vecteur(Vecteur Vec)
+    {
+        coordonnees.add((T)Vec.coordonnees.get(0));
+        coordonnees.add((T)Vec.coordonnees.get(1));
+    }
     public Vecteur()
     {
         T x = (T) Integer.valueOf(0), y = (T) Integer.valueOf(0);
@@ -40,12 +45,5 @@ public class Vecteur<T extends Number> {
     public void set(T value, int i)
     {
         coordonnees.set(i&1, value);
-    }
-    
-    
-    @Override
-    public Vecteur<T> clone() throws CloneNotSupportedException
-    {
-        return (Vecteur) super.clone();
     }
 }

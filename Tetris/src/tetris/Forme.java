@@ -43,11 +43,13 @@ public class Forme {
     }
 
     public Vecteur<Integer>[] getPoints() {
-        return etat.clone();
+        Vecteur<Integer>[] temp = new Vecteur[etat.length];
+        for(int i = 0;i< etat.length;i++) temp[i] = new Vecteur(etat[i]);
+        return temp;
     }
 
     public Vecteur<Integer> getPoints(int i) throws CloneNotSupportedException {
-        return etat[i].clone();
+        return new Vecteur(etat[i]);
     }
 
     public void setPoints(Vecteur<Integer>[] value) {
@@ -203,7 +205,6 @@ public class Forme {
         Vecteur<Integer>[] tempTabVec;
         tempTabVec = getPoints();
         int minMaxValues[][] = minMax();
-        j = 0;
         minX = minMaxValues[0][0];
         maxX = minMaxValues[0][1];
         minY = minMaxValues[1][0];

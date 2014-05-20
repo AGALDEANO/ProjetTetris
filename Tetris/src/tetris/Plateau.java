@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 public class Plateau implements java.lang.Runnable {
 
     private boolean pause = false;
+    private int rotation = 0;
+    private int deplacement = 0;
     private static final Random rand = new Random();
     private boolean fin = false;
     private Piece courante;
@@ -44,7 +46,7 @@ public class Plateau implements java.lang.Runnable {
         }
     }
 
-    public void nouvellePiece() {
+    private void nouvellePiece() {
         courante = suivantes[0];
         int i;
         for (i = 0; i < suivantes.length - 1; i++) {
@@ -59,13 +61,97 @@ public class Plateau implements java.lang.Runnable {
         vitesse = 1f;
     }
 
-    public boolean updatePosition() {
+    private boolean updatePosition() {
         boolean colision = false;
-        Vecteur<Integer> temp = new Vecteur();
         int DX;
+        Vecteur<Integer> temp = new Vecteur();
+
+        if (rotation != 0 && deplacement != 0) {
+            Forme tempForme = new Forme(courante.getForme());
+            if (rotation == -1) {
+                tempForme.rotACW();
+            } else if (rotation == 1) {
+                tempForme.rotCW();
+            }
+            DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
+            if (DX != 0) {
+                for (int i = 0; i < tempForme.getPoints().length; i++) {
+                    temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue() + deplacement);
+                    if (!isEmpty(temp)) {
+                        colision = true;
+                        break;
+                    }
+                }
+            }
+            if (!colision) {
+                positionReelle.setValue(positionReelle.get(0) + vitesse, positionReelle.get(1) + deplacement);
+                if (rotation == -1) {
+                    courante.rotACW();
+                } else if (rotation == 1) {
+                    courante.rotCW();
+                }
+                deplacement = 0;
+                rotation = 0;
+                return colision;
+            } else {
+                colision = false;
+            }
+        }
+        if (rotation != 0) {
+            Forme tempForme = new Forme(courante.getForme());
+            if (rotation == -1) {
+                tempForme.rotCW();
+            } else if (rotation == 1) {
+                tempForme.rotACW();
+            }
+            DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
+            if (DX != 0) {
+                for (int i = 0; i < tempForme.getPoints().length; i++) {
+                    temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue());
+                    if (!isEmpty(temp)) {
+                        colision = true;
+                        break;
+                    }
+                }
+            }
+            if (!colision) {
+                positionReelle.setValue(positionReelle.get(0) + vitesse, positionReelle.get(1));
+                if (rotation == -1) {
+                    courante.rotACW();
+                } else if (rotation == 1) {
+                    courante.rotCW();
+                }
+                rotation = 0;
+                return colision;
+            } else {
+                colision = false;
+            }
+        }
+        if (deplacement != 0) {
+            Forme tempForme = new Forme(courante.getForme());
+
+            DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
+            if (DX != 0) {
+                for (int i = 0; i < tempForme.getPoints().length; i++) {
+                    temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue() + deplacement);
+                    if (!isEmpty(temp)) {
+                        colision = true;
+                        break;
+                    }
+                }
+            }
+            if (!colision) {
+                positionReelle.setValue(positionReelle.get(0) + vitesse, positionReelle.get(1) + deplacement);
+                deplacement = 0;
+                return colision;
+            } else {
+                colision = false;
+            }
+        }
+        Forme tempForme = new Forme(courante.getForme());
         DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
         if (DX != 0) {
-            for (int i = 0; i < courante.getForme().getPoints().length; i++) {
+            for (int i = 0; i < tempForme.getPoints().length; i++) {
                 temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue());
                 if (!isEmpty(temp)) {
                     colision = true;
@@ -74,16 +160,17 @@ public class Plateau implements java.lang.Runnable {
             }
         }
         if (!colision) {
-            positionReelle.set(positionReelle.get(0) + vitesse, 0);
+            positionReelle.setValue(positionReelle.get(0) + vitesse, positionReelle.get(1));
+            deplacement = 0;
         }
         return colision;
     }
 
-    public boolean isIn(Vecteur<Integer> Vec) {
+    private boolean isIn(Vecteur<Integer> Vec) {
         return Vec.get(0) >= 0 && Vec.get(0) < tailleX && Vec.get(1) >= 0 && Vec.get(1) < tailleY;
     }
 
-    public boolean isEmpty(Vecteur<Integer> Vec) {
+    private boolean isEmpty(Vecteur<Integer> Vec) {
         if (isIn(Vec)) {
             return plateau[Vec.get(0)][Vec.get(1)] == 0;
         } else {
@@ -91,11 +178,27 @@ public class Plateau implements java.lang.Runnable {
         }
     }
 
-    void pause() {
+    public void pause() {
         pause = true;
     }
 
-    void play() {
+    public void rotCW() {
+        rotation = 1;
+    }
+
+    public void rotACW() {
+        rotation = -1;
+    }
+
+    public void deplacementGauche() {
+        deplacement = -1;
+    }
+
+    public void deplacementDroite() {
+        deplacement = 1;
+    }
+
+    public void play() {
         pause = false;
         notify();
     }
@@ -118,16 +221,22 @@ public class Plateau implements java.lang.Runnable {
                 fin = true;
             }
             i++;
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if(i%7==0) rotCW();
+            if(i%5==0) rotACW();
+            if(i%3==0) deplacementGauche();
+            if(i%11==0) deplacementDroite();
         }
         System.out.println(toString());
 
     }
 
-    public int[] update() {
+    private int[] update() {
         eraseCourante();
-        if (rand.nextInt(4) == 0) {
-            courante.rotCW();
-        }
         if (updatePosition()) {
             drawCourante();
             int[] lines = checkLines();
@@ -145,16 +254,22 @@ public class Plateau implements java.lang.Runnable {
     private void eraseCourante() {
         Forme temp = courante.getForme();
         int taille = temp.getPoints().length;
+        int x, y;
         for (int i = 0; i < taille; i++) {
-            plateau[getVecteur(i).get(0).intValue()][getVecteur(i).get(1).intValue()] = 0;
+            x = getVecteur(i).get(0).intValue();
+            y = getVecteur(i).get(1).intValue();
+            plateau[x][y] = 0;
         }
     }
 
     private void drawCourante() {
         Forme temp = courante.getForme();
+        int x, y;
         int taille = temp.getPoints().length;
         for (int i = 0; i < taille; i++) {
-            plateau[getVecteur(i).get(0).intValue()][getVecteur(i).get(1).intValue()] = courante.getIdColor();
+            x = getVecteur(i).get(0).intValue();
+            y = getVecteur(i).get(1).intValue();
+            plateau[x][y] = courante.getIdColor();
         }
     }
 
@@ -230,7 +345,7 @@ public class Plateau implements java.lang.Runnable {
         return courante;
     }
 
-    public Vecteur getVecteur(int i) {
+    private Vecteur getVecteur(int i) {
 
         return new Vecteur(courante.getForme().getPoints(i).get(0) + position.get(0), courante.getForme().getPoints(i).get(1) + position.get(1));
     }

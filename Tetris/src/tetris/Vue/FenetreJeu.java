@@ -30,7 +30,7 @@ public class FenetreJeu extends Vue{
         super();
         score = new Score();
         tab = new Plateau();
-        grid = new Grid(tab.getTailleY(),tab.getTailleX(),4);
+        grid = new Grid(tab.getTailleX(),tab.getTailleY(),2);
         pieces = new Pieces(tab.getSuivantes(),tab.getSuivantes().length);
         
         Icon icon = new ImageIcon(getClass().getResource("/images/tetris-logo.png"));

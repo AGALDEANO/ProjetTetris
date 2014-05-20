@@ -176,7 +176,7 @@ public class Forme {
         liste.add(new Vecteur(0, 0));
         liste.add(new Vecteur(1, 1));
         liste.add(new Vecteur(0, 1));
-        liste.add(new Vecteur(2, 0));
+        liste.add(new Vecteur(1, 2));
 
         return new Forme("Z", liste);
     }

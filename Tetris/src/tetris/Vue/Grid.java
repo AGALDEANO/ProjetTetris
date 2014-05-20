@@ -7,52 +7,35 @@
 package tetris.Vue;
 
 import java.awt.Color;
-import java.awt.GridLayout;
-import javax.swing.JPanel;
 
 /**
  *
  * @author Dimitri
  */
-public class Grid extends JPanel{
-    private int ligne;
-    private int colonne;
-    private Case[][] tableau;
+public class Grid extends ModeleGrid{
+    private Color[][] tableau;
     private int hauteurZoneFantome;
     
     public Grid (int _ligne, int _colonne,int hzf){
-        super();
-        ligne=_ligne;
-        colonne=_colonne;
+        super(_ligne-hzf,_colonne);
         hauteurZoneFantome=hzf;
-        tableau = new Case[ligne][colonne];
-        GridLayout layout = new GridLayout (ligne, colonne);
-        this.setLayout(layout);
-        for (int i=0; i<ligne;i++){
-            for (int j=0;j<colonne; j++){
-                tableau[i][j]=new Case();
-                tableau[i][j].setBackground(Color.BLACK);
-                if (i>hauteurZoneFantome){
-                    this.add(tableau[i][j]);
-                }
-            }
-        }
+        tableau = new Color[_ligne][_colonne];
+        resetTableau();
     }
     
     public Grid (){
-        super();
-        ligne=20;
-        colonne=10;
+        super(16,10);
         hauteurZoneFantome=4;
-        tableau = new Case[ligne][colonne];
-        GridLayout layout = new GridLayout (ligne, colonne);
-        this.setLayout(layout);
-        for (int i=0; i<ligne;i++){
-            for (int j=0;j<colonne; j++){
-                tableau[i][j]=new Case();
-                tableau[i][j].setBackground(Color.BLACK);
-                if (i>hauteurZoneFantome){
-                    this.add(tableau[i][j]);
+        tableau = new Color[20][10];
+        resetTableau();
+    }
+    
+    public void resetTableau (){
+        for (int i=0; i<this.getRowCount()+hauteurZoneFantome;i++){
+            for (int j=0;j<this.getColumnCount(); j++){
+                tableau[i][j]=Color.BLACK;
+                if (i>=hauteurZoneFantome){
+                    this.setValueAt(tableau[i][j], i-hauteurZoneFantome, j);
                 }
             }
         }
@@ -60,12 +43,13 @@ public class Grid extends JPanel{
     
     public String ToString (){
         String res="";
-        for (int i=0; i<ligne;i++){
-            for (int j=0;j<colonne; j++){
-                res+=tableau[i][j].ToString()+' ';
+        for (int i=0; i<this.getRowCount();i++){
+            for (int j=0;j<this.getColumnCount(); j++){
+                res+=tableau[i][j].toString()+' ';
             }
             res+='\n';
         }
         return res;
     }
 }
+

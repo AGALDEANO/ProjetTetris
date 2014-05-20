@@ -24,7 +24,7 @@ public class Plateau implements java.lang.Runnable {
     private Vecteur<Float> positionReelle;
     private int[][] plateau;
     private int tailleX = 10;
-    private int tailleY = 16;
+    private int tailleY = 20;
     private int nombreSuivantes = 3;
 
     public Plateau() {
@@ -39,7 +39,7 @@ public class Plateau implements java.lang.Runnable {
         }
     }
 
-    public void nouvellePiece() {
+    public Piece nouvellePiece() {
         courante = suivantes[0];
         int i;
         for (i = 0; i < suivantes.length - 1; i++) {
@@ -194,5 +194,29 @@ public class Plateau implements java.lang.Runnable {
         return lines;
 
     }
+    
+    public int[] update() {
+        if(updatePosition())
+        {
+            nouvellePiece();
+            return checkLines();
+        }
+        return null;
+    }
 
+    public Piece[] getSuivantes() {
+        return suivantes;
+    }
+
+    public int[][] getPlateau() {
+        return plateau;
+    }
+
+    public int getTailleX() {
+        return tailleX;
+    }
+
+    public int getTailleY() {
+        return tailleY;
+    }
 }

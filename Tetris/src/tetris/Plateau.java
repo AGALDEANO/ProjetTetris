@@ -39,7 +39,7 @@ public class Plateau implements java.lang.Runnable {
         }
     }
 
-    public Piece nouvellePiece() {
+    public void nouvellePiece() {
         courante = suivantes[0];
         int i;
         for (i = 0; i < suivantes.length - 1; i++) {
@@ -193,15 +193,6 @@ public class Plateau implements java.lang.Runnable {
         }
         return lines;
 
-    }
-    
-    public int[] update() {
-        if(updatePosition())
-        {
-            nouvellePiece();
-            return checkLines();
-        }
-        return null;
     }
 
     public Piece[] getSuivantes() {

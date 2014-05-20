@@ -210,4 +210,8 @@ public class Plateau implements java.lang.Runnable {
     public int getTailleY() {
         return tailleY;
     }
+
+    public Piece getCourante() {
+        return courante;
+    }
 }

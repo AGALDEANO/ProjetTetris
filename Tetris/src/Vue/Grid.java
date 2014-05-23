@@ -7,60 +7,30 @@
 package Vue;
 
 import java.awt.Color;
+import javax.swing.BorderFactory;
+import javax.swing.JTable;
 
 /**
  *
  * @author Dimitri
  */
-public class Grid extends ModeleGrid{
-    private Color[][] tableau;
-    private int hauteurZoneFantome;
-    
-    public Grid (int _ligne, int _colonne,int hzf){
-        super(_ligne-hzf,_colonne);
-        hauteurZoneFantome=hzf;
-        tableau = new Color[_ligne][_colonne];
-        resetTableau();
-    }
-    
-    public Grid (){
-        super(16,10);
-        hauteurZoneFantome=4;
-        tableau = new Color[20][10];
-        resetTableau();
-    }
-    
-    public void resetTableau (){
-        for (int i=0; i<this.getRowCount()+hauteurZoneFantome;i++){
-            for (int j=0;j<this.getColumnCount(); j++){
-                tableau[i][j]=Color.BLACK;
-                if (i>=hauteurZoneFantome){
-                    this.setValueAt(tableau[i][j], i-hauteurZoneFantome, j);
-                }
-            }
+public class Grid extends JTable {
+    public Grid (int length,int width){
+        super (length, width);
+        this.setDefaultRenderer(Color.class, new ColorCellRenderer());
+        this.setTableHeader(null);
+        this.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.WHITE));
+        this.setShowVerticalLines(false);
+        this.setShowHorizontalLines(false);
+        this.setRowHeight(25);
+        for (int i=0; i<width;i++){
+            this.getColumnModel().getColumn(i).setPreferredWidth(25);
         }
+        this.setEnabled(false);
     }
-    
-    public String ToString (){
-        String res="";
-        for (int i=0; i<this.getRowCount();i++){
-            for (int j=0;j<this.getColumnCount(); j++){
-                res+=tableau[i][j].toString()+' ';
-            }
-            res+='\n';
-        }
-        return res;
-    }
-    
-    public void updateGrid(Color[][]plateau){
-        tableau=plateau;
-        for (int i=0; i<this.getRowCount()+hauteurZoneFantome;i++){
-            for (int j=0;j<this.getColumnCount(); j++){
-                if (i>=hauteurZoneFantome){
-                    this.setValueAt(tableau[i][j], i-hauteurZoneFantome, j);
-                }
-            }
-        }
+  
+    @Override
+    public Class getColumnClass(int columnIndex){
+	return Color.class;
     }
 }
-

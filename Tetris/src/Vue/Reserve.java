@@ -9,17 +9,16 @@ package Vue;
 import Modele.Vecteur;
 import Modele.Piece;
 import java.awt.Color;
-import tetris.*;
 
 /**
  *
  * @author Dimitri
  */
-public class Pieces extends ModeleGrid{
+public class Reserve extends Grid{
     private Piece[] piece;
     
     
-    public Pieces (Piece[] pieces, int length){
+    public Reserve (Piece[] pieces, int length){
         super(length*4,4);
         piece=pieces;
         for (int i=0; i<length; i++){

@@ -23,8 +23,8 @@ import javax.swing.JLabel;
  */
 public class FenetreJeu extends Vue implements KeyListener{
     private Score score;
-    private Grid grid;
-    private Pieces pieces;
+    private GrilleTetris grid;
+    private Reserve pieces;
     private JLabel titre;
     
     private Controleur controleur;
@@ -33,8 +33,8 @@ public class FenetreJeu extends Vue implements KeyListener{
         super();
         controleur = new Controleur(plateau);
         score = new Score();
-        grid = new Grid(plateau.getTailleX(),plateau.getTailleY(),2);
-        pieces = new Pieces(plateau.getSuivantes(),plateau.getSuivantes().length);
+        grid = new GrilleTetris(plateau.getTailleX(),plateau.getTailleY(),2);
+        pieces = new Reserve(plateau.getSuivantes(),plateau.getSuivantes().length);
         
         ImageIcon icon = new ImageIcon(scaleImage(new ImageIcon(getClass().getResource("/images/tetris-logo.png")).getImage(),400,150,50));
         titre = new JLabel(icon);

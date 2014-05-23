@@ -6,6 +6,8 @@
 
 package tetris;
 
+import Modele.Plateau;
+
 /**
  *
  * @author 4lexandre

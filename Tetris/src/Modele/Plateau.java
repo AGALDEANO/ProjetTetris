@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tetris;
+package Modele;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -197,7 +197,11 @@ public class Plateau implements java.lang.Runnable {
     public void deplacementDroite() {
         deplacement = 1;
     }
-
+    
+    public void modifierVitesse(float c){
+        vitesse*=c;
+    }
+    
     public void play() {
         pause = false;
         notify();
@@ -296,16 +300,34 @@ public class Plateau implements java.lang.Runnable {
             drawCourante();
         }
     }
-
+    
+    public int checkLine (int []line){
+        int i; 
+        boolean test=(line[0]==0);
+        for (i = 1; i<line.length;i++){
+            if ((line[i]==0)!=test){
+                break;
+            }
+        }
+        if (i>=line.length){
+            return 0; // Ligne incomplète
+        }
+        else if (test){
+            return 1; //Ligne vide
+        } 
+        return -1;//Ligne pleine
+    }
+    
     private int[] checkLines() {
         ArrayList<Integer> temp = new ArrayList<>();
         int i, j, k;
         for (i = tailleX - 1; i > 0; i--) {
             k = 0;
             for (j = 0; j < tailleY; j++) {
-                if (plateau[i][j] != 0) {
-                    k++;
+                if (plateau[i][j] == 0) {
+                    break;
                 }
+                k++;
             }
             if (k == tailleY) {
                 temp.add(i);

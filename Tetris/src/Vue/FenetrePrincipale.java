@@ -4,12 +4,10 @@
  * and open the template in the editor.
  */
 
-package tetris.Vue;
+package Vue;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
 import javax.swing.*;
 
 /**
@@ -51,10 +49,5 @@ public class FenetrePrincipale extends Vue  {
         this.getContentPane().add(b4, BorderLayout.CENTER);
         
         this.setVisible(true);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

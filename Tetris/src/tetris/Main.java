@@ -5,6 +5,9 @@
  */
 package tetris;
 
+import Modele.Plateau;
+import Vue.FenetreJeu;
+
 /**
  *
  * @author 4lexandre
@@ -12,7 +15,7 @@ package tetris;
 public class Main {
 
     public static void main(String[] args) {
-        Tetris tetris = new Tetris();
-        tetris.run();
+        Plateau plateau = new Plateau();
+        FenetreJeu fenetre = new FenetreJeu(plateau);
     }
 }

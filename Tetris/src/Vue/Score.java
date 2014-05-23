@@ -1,5 +1,5 @@
 
-package tetris.Vue;
+package Vue;
 
 import java.awt.Dimension;
 import java.awt.Font;

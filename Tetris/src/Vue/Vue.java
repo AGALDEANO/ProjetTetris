@@ -4,13 +4,12 @@
  * and open the template in the editor.
  */
 
-package tetris.Vue;
+package Vue;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
@@ -18,9 +17,9 @@ import javax.swing.*;
  *
  * @author Dimitri
  */
-public abstract class Vue extends JFrame implements ActionListener{
+public abstract class Vue extends JFrame{
     private JPanel pan;
-    
+    private KeyboardListener keyboard;
     public Vue (){
         this.setTitle("Tetris");
         this.setSize(800, 700);
@@ -29,6 +28,7 @@ public abstract class Vue extends JFrame implements ActionListener{
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+        keyboard = new KeyboardListener();
         pan = new JPanel();
         pan.setBackground(Color.BLACK);
         this.setContentPane(pan);

@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 
-package tetris.Vue;
+package Vue;
 
+import Modele.Vecteur;
+import Modele.Piece;
 import java.awt.Color;
 import tetris.*;
 

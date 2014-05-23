@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author 4lexandre
  */
-public class Plateau {
+public class Plateau extends Thread {
 
     private boolean pause = false;
     private int rotation = 0;
@@ -156,7 +156,9 @@ public class Plateau {
     }
 
     public void augmenterVitesse(float c) {
-        vitesse *= c;
+        if (c != 0f) {
+            vitesse *= c;
+        }
     }
 
     public void diminuerVitesse(float c) {
@@ -165,9 +167,11 @@ public class Plateau {
         }
     }
 
+    @Override
     public void run() {
         int i = 0;
         while (!fin) {
+            drawCourante();
             System.out.println(toString());
             if (pause) {
                 try {
@@ -177,25 +181,17 @@ public class Plateau {
                 }
             }
             update();
-            if (i == 500) {
-                fin = true;
-            }
-            i++;
             try {
                 Thread.sleep(200);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (i % 1 == 0) {
-                rotCW();
+            if (i == 500) {
+                fin = true;
             }
-            if (i % 3 == 0) {
-                deplacementGauche();
-            }
-            if (i % 2 == 0) {
-                deplacementDroite();
-            }
+            i++;
         }
+        drawCourante();
         System.out.println(toString());
 
     }
@@ -207,11 +203,11 @@ public class Plateau {
             int[] lines = checkLines();
             deleteLines(lines);
             nouvellePiece();
-            if(testDeplacement(0,0))
-            {
+            if (testDeplacement(0, 0)) {
                 drawCourante();
+            } else {
+                fin = true;
             }
-            else fin=true;
             return lines;
         } else {
             position.setValue(positionReelle.get(0).intValue(), positionReelle.get(1).intValue());

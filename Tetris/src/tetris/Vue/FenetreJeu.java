@@ -31,9 +31,9 @@ public class FenetreJeu extends Vue{
         grid = new Grid(plateau.getTailleX(),plateau.getTailleY(),2);
         pieces = new Pieces(plateau.getSuivantes(),plateau.getSuivantes().length);
         
-        Icon icon = new ImageIcon(getClass().getResource("/images/tetris-logo.png"));
+        ImageIcon icon = new ImageIcon(scaleImage(new ImageIcon(getClass().getResource("/images/tetris-logo.png")).getImage(),400,150,50));
         titre = new JLabel(icon);
-        titre.setPreferredSize(new Dimension(800, 150));
+        titre.setPreferredSize(new Dimension(this.getWidth(), 200));
         
         this.getContentPane().add(titre, BorderLayout.EAST);
         this.getContentPane().add(score, BorderLayout.WEST);

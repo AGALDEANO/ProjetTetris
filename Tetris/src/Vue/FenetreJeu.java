@@ -20,17 +20,20 @@ import javax.swing.JLabel;
  *
  * @author Dimitri
  */
-public class FenetreJeu extends Vue implements KeyListener {
+public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
 
     private Score score;
+    private boolean fin = false;
     private GrilleTetris grid;
     private Reserve pieces;
     private JLabel titre;
 
     private final Controleur controleur;
+    private final Plateau plateau;
 
-    public FenetreJeu(Plateau plateau) {
+    public FenetreJeu(Plateau _plateau) {
         super();
+        plateau = _plateau;
         controleur = new Controleur(plateau);
         score = new Score();
         grid = new GrilleTetris(plateau.getTailleX(), plateau.getTailleY(), 2);
@@ -48,7 +51,7 @@ public class FenetreJeu extends Vue implements KeyListener {
         this.setVisible(true);
     }
 
-    public void updateGrid(Plateau plateau) {
+    public void updateGrid() {
         synchronized (plateau) {
             Color[][] tab = new Color[plateau.getTailleX()][plateau.getTailleY()];
 
@@ -108,5 +111,21 @@ public class FenetreJeu extends Vue implements KeyListener {
                 controleur.setAction(6);//ralentir vers le bas
             }
         }
+    }
+
+    @Override
+    public void run() {
+        controleur.run();
+        plateau.run();
+        do
+        {
+            synchronized(plateau)
+            {
+                updateGrid();
+                fin = plateau.getFin();
+            }
+        }while(!fin);
+        
+        
     }
 }

@@ -12,13 +12,13 @@ import java.util.ArrayList;
  *
  * @author Dimitri
  */
-public class Controleur extends Thread {
+public class Controleur implements java.lang.Runnable {
 
     private final Plateau plateau;
     private ArrayList<Integer> action;
 
     public Controleur(Plateau _plateau) {
-        action = new ArrayList<Integer>();
+        action = new ArrayList<>();
         action.add(0);
         plateau = _plateau;
     }
@@ -32,45 +32,41 @@ public class Controleur extends Thread {
         int size = 0;
         while (true) {
             size = action.size() - 1;
-            switch (action.get(size)) {
-                case 1:
-                    synchronized (plateau) {
+            synchronized (plateau) {
+                switch (action.get(size)) {
+                    case 1:
                         plateau.rotACW();
                         action.remove(size);
-                    }
-                    break;
-                case 2:
-                    synchronized (plateau) {
+
+                        break;
+                    case 2:
                         plateau.rotCW();
                         action.remove(size);
-                    }
-                    break;
-                case 3:
-                    synchronized (plateau) {
+
+                        break;
+                    case 3:
                         plateau.deplacementDroite();
                         action.remove(size);
-                    }
-                    break;
-                case 4:
-                    synchronized (plateau) {
+
+                        break;
+                    case 4:
                         plateau.deplacementGauche();
                         action.remove(size);
-                    }
-                    break;
-                case 5:
-                    synchronized (plateau) {
+
+                        break;
+                    case 5:
                         plateau.modifierVitesse(2);
                         action.remove(size);
-                    }
-                    break;
-                case 6:
-                    synchronized (plateau) {
+
+                        break;
+                    case 6:
                         plateau.modifierVitesse(1 / 2);
                         action.remove(size);
-                    }
-                    break;
-                default:
-                    break;
+
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

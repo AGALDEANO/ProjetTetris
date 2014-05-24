@@ -60,12 +60,17 @@ public class Plateau implements java.lang.Runnable {
         positionReelle = new Vecteur(position.get(0).floatValue(), position.get(1).floatValue());
         vitesse = 1f;
     }
+    
+    public boolean getFin()
+    {
+        return fin;
+    }
 
     private boolean updatePosition() {
         boolean colision = false;
         int DX;
         Vecteur<Integer> temp = new Vecteur();
-       
+
         if (rotation != 0 && deplacement != 0) {
             Forme tempForme = new Forme(courante.getForme());
             if (rotation == -1) {
@@ -197,11 +202,11 @@ public class Plateau implements java.lang.Runnable {
     public void deplacementDroite() {
         deplacement = 1;
     }
-    
-    public void modifierVitesse(float c){
-        vitesse*=c;
+
+    public void modifierVitesse(float c) {
+        vitesse *= c;
     }
-    
+
     public void play() {
         pause = false;
         notify();
@@ -220,11 +225,8 @@ public class Plateau implements java.lang.Runnable {
                     Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            synchronized(this)
-            {
-                update();
-            }
-            
+            update();
+
             i++;
             try {
                 Thread.sleep(300);
@@ -236,7 +238,7 @@ public class Plateau implements java.lang.Runnable {
 
     }
 
-    private int[] update() {
+    synchronized private int[] update() {
         eraseCourante();
         if (updatePosition()) {
             drawCourante();
@@ -297,24 +299,23 @@ public class Plateau implements java.lang.Runnable {
             drawCourante();
         }
     }
-    
-    public int checkLine (int []line){
-        int i; 
-        boolean test=(line[0]==0);
-        for (i = 1; i<line.length;i++){
-            if ((line[i]==0)!=test){
+
+    public int checkLine(int[] line) {
+        int i;
+        boolean test = (line[0] == 0);
+        for (i = 1; i < line.length; i++) {
+            if ((line[i] == 0) != test) {
                 break;
             }
         }
-        if (i>=line.length){
+        if (i >= line.length) {
             return 0; // Ligne incomplète
-        }
-        else if (test){
+        } else if (test) {
             return 1; //Ligne vide
-        } 
+        }
         return -1;//Ligne pleine
     }
-    
+
     private int[] checkLines() {
         ArrayList<Integer> temp = new ArrayList<>();
         int i, j, k;

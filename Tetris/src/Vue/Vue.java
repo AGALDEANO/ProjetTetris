@@ -19,7 +19,6 @@ import javax.swing.*;
  */
 public abstract class Vue extends JFrame{
     private JPanel pan;
-    private KeyboardListener keyboard;
     public Vue (){
         this.setTitle("Tetris");
         this.setSize(800, 700);
@@ -28,7 +27,6 @@ public abstract class Vue extends JFrame{
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        keyboard = new KeyboardListener();
         pan = new JPanel();
         pan.setBackground(Color.BLACK);
         this.setContentPane(pan);

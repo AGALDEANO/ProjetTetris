@@ -226,14 +226,10 @@ public class Plateau implements java.lang.Runnable {
             }
             i++;
             try {
-                Thread.sleep(500);
+                Thread.sleep(300);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if(i%7==0) rotCW();
-            if(i%5==0) rotACW();
-            if(i%3==0) deplacementGauche();
-            if(i%11==0) deplacementDroite();
         }
         System.out.println(toString());
 

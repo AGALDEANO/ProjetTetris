@@ -136,7 +136,9 @@ public class Plateau extends Thread {
 
     public void play() {
         pause = false;
-        notify();
+        synchronized (this) {
+            notify();
+        }
     }
 
     public void rotCW() {
@@ -175,7 +177,9 @@ public class Plateau extends Thread {
             System.out.println(toString());
             if (pause) {
                 try {
-                    wait();
+                    synchronized (this) {
+                        wait();
+                    }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
                 }

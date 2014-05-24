@@ -65,7 +65,7 @@ public class Plateau implements java.lang.Runnable {
         boolean colision = false;
         int DX;
         Vecteur<Integer> temp = new Vecteur();
-
+       
         if (rotation != 0 && deplacement != 0) {
             Forme tempForme = new Forme(courante.getForme());
             if (rotation == -1) {
@@ -220,10 +220,11 @@ public class Plateau implements java.lang.Runnable {
                     Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            update();
-            if (i == 100) {
-                fin = true;
+            synchronized(this)
+            {
+                update();
             }
+            
             i++;
             try {
                 Thread.sleep(300);

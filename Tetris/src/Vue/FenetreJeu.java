@@ -129,6 +129,9 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
                 updateGrid();
                 fin = plateau.getFin();
             }
+            this.getContentPane().add(grid, BorderLayout.CENTER);
+            this.update(null);
+            
         }while(!fin);
         
         

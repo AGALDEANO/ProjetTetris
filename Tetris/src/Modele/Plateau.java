@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author 4lexandre
  */
-public class Plateau implements java.lang.Runnable {
+public class Plateau extends Thread {
 
     private boolean pause = false;
     private int rotation = 0;

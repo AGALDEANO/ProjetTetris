@@ -142,6 +142,7 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
 
     @Override
     public void run() {
+        controleur.start();
         do {
             synchronized (plateau) {
 

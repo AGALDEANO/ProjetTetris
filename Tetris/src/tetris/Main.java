@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package tetris;
+
 import Controleur.Controleur;
 import Modele.Plateau;
 import Vue.FenetreJeu;
@@ -18,8 +19,6 @@ public class Main {
         Plateau plateau = new Plateau();
         Controleur controleur = new Controleur(plateau);
         FenetreJeu fenetre = new FenetreJeu(plateau, controleur);
-        controleur.run();
-        plateau.run();
         fenetre.run();
     }
 }

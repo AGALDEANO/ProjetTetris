@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Dimitri
  */
-public class Controleur implements java.lang.Runnable {
+public class Controleur extends Thread {
 
     private final Plateau plateau;
     private ArrayList<Integer> action;
@@ -30,6 +30,7 @@ public class Controleur implements java.lang.Runnable {
 
     @Override
     public void run() {
+        plateau.start();
         int size = 0;
         do {
             size = action.size() - 1;

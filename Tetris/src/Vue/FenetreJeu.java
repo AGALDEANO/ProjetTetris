@@ -22,7 +22,7 @@ import javax.swing.JLabel;
  *
  * @author Dimitri
  */
-public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
+public class FenetreJeu extends Vue implements java.lang.Runnable {
 
     private Score score;
     private boolean fin = false;
@@ -44,13 +44,65 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
         ImageIcon icon = new ImageIcon(scaleImage(new ImageIcon(getClass().getResource("/images/tetris-logo.png")).getImage(), 400, 150, 50));
         titre = new JLabel(icon);
         titre.setPreferredSize(new Dimension(this.getWidth(), 200));
-
+        
         this.getContentPane().add(titre, BorderLayout.EAST);
         this.getContentPane().add(score, BorderLayout.WEST);
         this.getContentPane().add(grid, BorderLayout.CENTER);
         this.getContentPane().add(pieces, BorderLayout.EAST);
 
         this.setVisible(true);
+        this.addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+                switch (e.getKeyChar()) {
+                    case 'l':
+                        synchronized (controleur) {
+                            controleur.setAction(1);//rotation acw;
+                        }
+                        break;
+                    case 'm':
+                        synchronized (controleur) {
+                            controleur.setAction(2);//rotation cw;
+                        }
+                        break;
+                    case 'd':
+                        synchronized (controleur) {
+                            controleur.setAction(3);//déplacement vers la droite
+                        }
+                        break;
+                    case 'q':
+                        synchronized (controleur) {
+                            controleur.setAction(4);//déplacement vers la gauche
+                        }
+                        break;
+                    default:
+                        //nope
+                        break;
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyChar() == 's') {
+                    synchronized (controleur) {
+                        controleur.setAction(5);//accélérer vers le bas
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyChar() == 's') {
+                    synchronized (controleur) {
+                        controleur.setAction(6);//ralentir vers le bas
+                    }
+                } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    synchronized (controleur) {
+                        controleur.setAction(7);//mettre en pause
+                    }
+                }
+            }
+        });
     }
 
     public FenetreJeu(Plateau _plateau, Controleur _controleur) {
@@ -87,57 +139,6 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
             pieces.updatePiece(plateau.getSuivantes());
         }
 
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        switch (e.getKeyChar()) {
-            case 'l':
-                synchronized (controleur) {
-                    controleur.setAction(1);//rotation acw;
-                }
-                break;
-            case 'm':
-                synchronized (controleur) {
-                    controleur.setAction(2);//rotation cw;
-                }
-                break;
-            case 'd':
-                synchronized (controleur) {
-                    controleur.setAction(3);//déplacement vers la droite
-                }
-                break;
-            case 'q':
-                synchronized (controleur) {
-                    controleur.setAction(4);//déplacement vers la gauche
-                }
-                break;
-            default:
-                //nope
-                break;
-        }
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyChar() == 's') {
-            synchronized (controleur) {
-                controleur.setAction(5);//accélérer vers le bas
-            }
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyChar() == 's') {
-            synchronized (controleur) {
-                controleur.setAction(6);//ralentir vers le bas
-            }
-        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            synchronized (controleur) {
-                controleur.setAction(7);//mettre en pause
-            }
-        }
     }
 
     @Override

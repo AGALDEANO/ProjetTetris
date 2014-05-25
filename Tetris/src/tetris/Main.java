@@ -18,8 +18,8 @@ public class Main {
         Plateau plateau = new Plateau();
         Controleur controleur = new Controleur(plateau);
         FenetreJeu fenetre = new FenetreJeu(plateau, controleur);
-        fenetre.run();
         controleur.run();
+        fenetre.run();
         plateau.run();
     }
 }

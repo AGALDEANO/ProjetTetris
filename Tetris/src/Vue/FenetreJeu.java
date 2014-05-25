@@ -29,7 +29,6 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
     private GrilleTetris grid;
     private Reserve pieces;
     private JLabel titre;
-
     private final Controleur controleur;
     private final Plateau plateau;
 
@@ -145,11 +144,10 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
         controleur.start();
         do {
             synchronized (plateau) {
-
+                
                 updateGrid();
                 pieces = new Reserve(plateau.getSuivantes(), plateau.getSuivantes().length);
                 fin = plateau.getFin();
-                System.out.println(plateau.toString());
 
             }
             this.getContentPane().removeAll();
@@ -165,6 +163,5 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
                 Logger.getLogger(FenetreJeu.class.getName()).log(Level.SEVERE, null, ex);
             }
         } while (!fin);
-
     }
 }

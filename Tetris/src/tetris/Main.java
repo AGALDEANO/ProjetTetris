@@ -19,7 +19,7 @@ public class Main {
         Controleur controleur = new Controleur(plateau);
         FenetreJeu fenetre = new FenetreJeu(plateau, controleur);
         controleur.run();
-        fenetre.run();
         plateau.run();
+        fenetre.run();
     }
 }

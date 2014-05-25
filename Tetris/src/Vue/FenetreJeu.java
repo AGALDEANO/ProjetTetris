@@ -13,6 +13,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -35,6 +37,26 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
         super();
         plateau = _plateau;
         controleur = new Controleur(plateau);
+        score = new Score();
+        grid = new GrilleTetris(plateau.getTailleX(), plateau.getTailleY(), 2);
+        pieces = new Reserve(plateau.getSuivantes(), plateau.getSuivantes().length);
+
+        ImageIcon icon = new ImageIcon(scaleImage(new ImageIcon(getClass().getResource("/images/tetris-logo.png")).getImage(), 400, 150, 50));
+        titre = new JLabel(icon);
+        titre.setPreferredSize(new Dimension(this.getWidth(), 200));
+
+        this.getContentPane().add(titre, BorderLayout.EAST);
+        this.getContentPane().add(score, BorderLayout.WEST);
+        this.getContentPane().add(grid, BorderLayout.CENTER);
+        this.getContentPane().add(pieces, BorderLayout.EAST);
+
+        this.setVisible(true);
+    }
+
+    public FenetreJeu(Plateau _plateau, Controleur _controleur) {
+        super();
+        plateau = _plateau;
+        controleur = _controleur;
         score = new Score();
         grid = new GrilleTetris(plateau.getTailleX(), plateau.getTailleY(), 2);
         pieces = new Reserve(plateau.getSuivantes(), plateau.getSuivantes().length);
@@ -110,8 +132,7 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
             synchronized (controleur) {
                 controleur.setAction(6);//ralentir vers le bas
             }
-        }
-        else if (e.getKeyCode()==KeyEvent.VK_ESCAPE){
+        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             synchronized (controleur) {
                 controleur.setAction(7);//mettre en pause
             }
@@ -120,21 +141,26 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
 
     @Override
     public void run() {
-        controleur.run();
-        plateau.run();
         do {
             synchronized (plateau) {
+
                 updateGrid();
                 pieces = new Reserve(plateau.getSuivantes(), plateau.getSuivantes().length);
                 fin = plateau.getFin();
 
             }
+            this.getContentPane().removeAll();
+            this.getContentPane().add(titre, BorderLayout.EAST);
+            this.getContentPane().add(score, BorderLayout.WEST);
             this.getContentPane().add(grid, BorderLayout.CENTER);
             this.getContentPane().add(pieces, BorderLayout.EAST);
-
             getContentPane().revalidate();
-
             getContentPane().repaint();
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(FenetreJeu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } while (!fin);
 
     }

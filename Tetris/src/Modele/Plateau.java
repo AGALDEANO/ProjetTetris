@@ -223,7 +223,6 @@ public class Plateau extends Thread {
     public void run() {
         drawCourante();
         while (!fin) {
-            System.out.println(toString());
             if (pause) {
                 try {
                     wait();
@@ -238,17 +237,18 @@ public class Plateau extends Thread {
                 Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        System.out.println(toString());
 
     }
 
     synchronized private int[] update() {
         eraseCourante();
+        int i;
         if (updatePosition()) {
             drawCourante();
             int[] lines = checkLines();
             deleteLines(lines);
             nouvellePiece();
+            for(i=0;i<tailleY;i++) if(plateau[0][i]!=0) fin = true;
             drawCourante();
             return lines;
         } else {

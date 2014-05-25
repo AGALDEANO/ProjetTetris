@@ -80,6 +80,6 @@ public class Controleur extends Thread {
                         break;
                 }
             }
-        }while(fin);
+        }while(!fin);
     }
 }

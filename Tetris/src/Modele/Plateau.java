@@ -65,6 +65,11 @@ public class Plateau implements java.lang.Runnable {
     {
         return fin;
     }
+    
+    public boolean getPause()
+    {
+        return pause;
+    }
 
     private boolean updatePosition() {
         boolean colision = false;
@@ -184,8 +189,14 @@ public class Plateau implements java.lang.Runnable {
     }
 
     public void pause() {
-        pause = !pause;
-        notify();
+        pause = true;
+    }
+    public void play() {
+        pause = false;
+        synchronized(this)
+        { 
+            notify();
+        }
     }
 
     public void rotCW() {
@@ -210,7 +221,6 @@ public class Plateau implements java.lang.Runnable {
 
     @Override
     public void run() {
-        int i = 0;
         drawCourante();
         while (!fin) {
             System.out.println(toString());
@@ -222,8 +232,6 @@ public class Plateau implements java.lang.Runnable {
                 }
             }
             update();
-
-            i++;
             try {
                 Thread.sleep(300);
             } catch (InterruptedException ex) {

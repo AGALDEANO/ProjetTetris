@@ -16,6 +16,7 @@ public class Controleur implements java.lang.Runnable {
 
     private final Plateau plateau;
     private ArrayList<Integer> action;
+    private boolean fin=false;
 
     public Controleur(Plateau _plateau) {
         action = new ArrayList<>();
@@ -30,9 +31,10 @@ public class Controleur implements java.lang.Runnable {
     @Override
     public void run() {
         int size = 0;
-        while (true) {
+        do {
             size = action.size() - 1;
             synchronized (plateau) {
+            fin = plateau.getFin();
                 switch (action.get(size)) {
                     case 1:
                         plateau.rotACW();
@@ -65,7 +67,11 @@ public class Controleur implements java.lang.Runnable {
 
                         break;
                     case 7:
-                        plateau.pause();
+                        if (plateau.getPause()) {
+                            plateau.play();
+                        } else {
+                            plateau.pause();
+                        }
                         action.remove(size);
 
                         break;
@@ -73,6 +79,6 @@ public class Controleur implements java.lang.Runnable {
                         break;
                 }
             }
-        }
+        }while(fin);
     }
 }

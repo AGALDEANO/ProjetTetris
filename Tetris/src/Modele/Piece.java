@@ -98,7 +98,7 @@ public class Piece {
             case(Forme._O):
                 return Color.YELLOW;
             default:
-                return Color.YELLOW;
+                return Color.BLACK;
         }
     }
     

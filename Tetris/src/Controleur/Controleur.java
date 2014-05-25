@@ -64,6 +64,11 @@ public class Controleur implements java.lang.Runnable {
                         action.remove(size);
 
                         break;
+                    case 7:
+                        plateau.pause();
+                        action.remove(size);
+
+                        break;
                     default:
                         break;
                 }

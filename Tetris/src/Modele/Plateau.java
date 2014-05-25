@@ -184,7 +184,8 @@ public class Plateau implements java.lang.Runnable {
     }
 
     public void pause() {
-        pause = true;
+        pause = !pause;
+        notify();
     }
 
     public void rotCW() {
@@ -205,11 +206,6 @@ public class Plateau implements java.lang.Runnable {
 
     public void modifierVitesse(float c) {
         vitesse *= c;
-    }
-
-    public void play() {
-        pause = false;
-        notify();
     }
 
     @Override

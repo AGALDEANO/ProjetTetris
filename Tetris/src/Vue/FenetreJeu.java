@@ -111,6 +111,11 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
                 controleur.setAction(6);//ralentir vers le bas
             }
         }
+        else if (e.getKeyCode()==KeyEvent.VK_ESCAPE){
+            synchronized (controleur) {
+                controleur.setAction(7);//mettre en pause
+            }
+        }
     }
 
     @Override

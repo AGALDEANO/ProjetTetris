@@ -79,7 +79,8 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
 
             for (int i = 0; i < plateau.getTailleX(); i++) {
                 for (int j = 0; j < plateau.getTailleY(); j++) {
-                    tab[i][j] = Piece.getColor(plateau.getPlateau()[i][j]);
+                    Color color = Piece.getColor(plateau.getPlateau()[i][j]);
+                    tab[i][j] = color;
                 }
             }
             grid.updateGrid(tab);
@@ -150,7 +151,7 @@ public class FenetreJeu extends Vue implements KeyListener, java.lang.Runnable {
 
             }
             this.getContentPane().removeAll();
-            this.getContentPane().add(titre, BorderLayout.EAST);
+            this.getContentPane().add(titre, BorderLayout.NORTH);
             this.getContentPane().add(score, BorderLayout.WEST);
             this.getContentPane().add(grid, BorderLayout.CENTER);
             this.getContentPane().add(pieces, BorderLayout.EAST);

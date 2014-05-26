@@ -6,6 +6,7 @@
 package Modele;
 
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author 4lexandre
  */
-public class Plateau extends Thread {
+public class Plateau extends Observable implements Runnable{
 
     private boolean pause = false;
     private int rotation = 0;
@@ -193,10 +194,6 @@ public class Plateau extends Thread {
     }
     public void play() {
         pause = false;
-        synchronized(this)
-        { 
-            notify();
-        }
     }
 
     public void rotCW() {
@@ -219,7 +216,6 @@ public class Plateau extends Thread {
         vitesse *= c;
     }
 
-    @Override
     public void run() {
         drawCourante();
         while (!fin) {
@@ -232,7 +228,8 @@ public class Plateau extends Thread {
             }
             update();
             try {
-                Thread.sleep(300);
+                Thread.sleep(400);
+                update();
             } catch (InterruptedException ex) {
                 Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -240,7 +237,7 @@ public class Plateau extends Thread {
 
     }
 
-    synchronized private int[] update() {
+    private int[] update() {
         eraseCourante();
         int i;
         if (updatePosition()) {
@@ -255,6 +252,8 @@ public class Plateau extends Thread {
             position.setValue(positionReelle.get(0).intValue(), positionReelle.get(1).intValue());
         }
         drawCourante();
+        setChanged();
+        notifyObservers();
         return null;
     }
 

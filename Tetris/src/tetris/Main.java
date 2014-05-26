@@ -18,7 +18,10 @@ public class Main {
     public static void main(String[] args) {
         Plateau plateau = new Plateau();
         Controleur controleur = new Controleur(plateau);
-        FenetreJeu fenetre = new FenetreJeu(plateau, controleur);
-        fenetre.run();
+        FenetreJeu fenetre = new FenetreJeu(plateau);
+        
+        fenetre.addKeyListener(controleur);
+        plateau.addObserver(fenetre);
+        plateau.run();
     }
 }

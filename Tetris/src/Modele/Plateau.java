@@ -184,7 +184,6 @@ public class Plateau {
                         plateau[k][j] = plateau[k - 1][j];
                     }
                 }
-                System.out.println(indices[i]);
             }
         }
     }

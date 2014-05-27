@@ -38,7 +38,7 @@ public class Controleur implements KeyListener {
                 plateau.deplacementGauche();
                 break;
             case 's':
-                plateau.modifierVitesse(4);
+                plateau.modifierVitesse(4.0f*plateau.getVitesseBase());
                 break;
             case KeyEvent.VK_ESCAPE:
                 synchronized (plateau) {

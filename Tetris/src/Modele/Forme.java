@@ -25,6 +25,7 @@ public class Forme {
     public static final int _J = 5;
     public static final int _Z = 6;
     public static final int _S = 7;
+    public static final int _X = 8;
 
     //===========================================================
     public void rotCW() {
@@ -125,6 +126,8 @@ public class Forme {
                 return Forme.I();
             case _O:
                 return Forme.O();
+            case _X:
+                return Forme.X();
             default:
                 return Forme.O();
         }
@@ -139,6 +142,17 @@ public class Forme {
         Vecteur<Integer> _centre = new Vecteur(1, 1);
 
         return new Forme("T", liste, _centre);
+    }
+    public static Forme X() {
+        ArrayList<Vecteur> liste = new ArrayList<>();
+        liste.add(new Vecteur(0, 0));
+        liste.add(new Vecteur(1, 0));
+        liste.add(new Vecteur(1, 1));
+        liste.add(new Vecteur(1, 2));
+        liste.add(new Vecteur(0, 2));
+        Vecteur<Integer> _centre = new Vecteur(1, 1);
+
+        return new Forme("X", liste, _centre);
     }
 
     public static Forme I() {

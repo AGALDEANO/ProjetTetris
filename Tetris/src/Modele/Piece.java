@@ -19,7 +19,7 @@ public class Piece {
     private Color frame;
     private int idColor;
     private static final Random rand = new Random();
-    private static final int nombrePieces = 7;
+    private static final int nombrePieces = 8;
     
     public Piece(int _forme, int _couleur){
         forme= Forme.Forme(_forme);
@@ -75,6 +75,9 @@ public class Piece {
             case(Forme._O):
                 frame=Color.YELLOW;
                 break;
+            case(Forme._X):
+                frame=Color.GRAY;
+                break;
             default:
                 frame=Color.YELLOW;
                 break;
@@ -97,6 +100,8 @@ public class Piece {
                 return Color.CYAN;
             case(Forme._O):
                 return Color.YELLOW;
+            case(Forme._X):
+                return Color.GRAY;
             default:
                 return Color.BLACK;
         }

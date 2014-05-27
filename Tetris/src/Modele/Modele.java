@@ -67,9 +67,8 @@ public class Modele extends Observable implements Runnable {
     public int getScore() {
         return score;
     }
-    
-    public void resetVitesse()
-    {
+
+    public void resetVitesse() {
         vitesse = vitesseBase;
     }
 
@@ -86,7 +85,7 @@ public class Modele extends Observable implements Runnable {
 //        }
 
         timer = new Timer();
-        timer.scheduleAtFixedRate(new Timing(this), 0, 100);
+        timer.scheduleAtFixedRate(new Timing(this), 0, (int) (50.0f / vitesseBase));
     }
 
     public void rotCW() {
@@ -117,29 +116,23 @@ public class Modele extends Observable implements Runnable {
         }
     }
 
+    public float getVitesseBase() {
+        return vitesseBase;
+    }
+
     public void modifierVitesse(float c) {
         if (c != vitesse) {
             vitesse = c;
             timer.cancel();
             timer.purge();
             timer = new Timer();
-            timer.scheduleAtFixedRate(new Timing(this), 0, 100);
+            timer.scheduleAtFixedRate(new Timing(this), 0, (int) (50.0f / vitesseBase));
         }
 
     }
 
     public void update() {
         int i;
-        System.out.println(vitesse);
-//        while (pause) {
-//            try {
-//                synchronized (timer) {
-//                    timer.wait();
-//                }
-//            } catch (InterruptedException ex) {
-//                Logger.getLogger(Modele.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
         plateau.eraseCourante();
         boolean colision = plateau.descendre(vitesse);
         if (colision) {
@@ -148,9 +141,10 @@ public class Modele extends Observable implements Runnable {
             int[] lines = plateau.checkLines();
             plateau.deleteLines(lines);
             if (lines != null) {
-                score += Math.pow(Math.ceil(vitesseBase), lines.length+1);
-                vitesseBase *= 1+((float) score)/500;
+                score +=Math.ceil(vitesseBase + 1)*lines.length ;
+                vitesseBase = (float) Math.log(Math.log(score)+1)/4 + 0.4f;
                 resetVitesse();
+                System.out.println(vitesse);
             }
             for (i = 0; i < plateau.getTailleY(); i++) {
                 if (plateau.getPlateau()[0][i] != 0) {

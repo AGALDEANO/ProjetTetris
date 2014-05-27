@@ -6,6 +6,7 @@
 package Modele;
 
 import java.util.ArrayList;
+
 /**
  *
  * @author p1106501
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public class Forme {
 
     private Vecteur<Integer>[] etat;
+    private Vecteur<Integer> centre;
     private String nom;
     private final byte videChar = ' ';
     private final byte pleinChar = (byte) 0xDB;
@@ -27,21 +29,29 @@ public class Forme {
     //===========================================================
     public void rotCW() {
         // Rotations : (a;b) (b;-a) (-a;-b) (-b;a)
-        for (int i = 0; i < etat.length; i++) {
-            etat[i].setValue(etat[i].get(1), -etat[i].get(0));
+        // Rotation : (a;b) (a-x;b-y) (b-y;x-a) (b-y+x;x-a+y)
+        synchronized (this) {
+            for (int i = 0; i < etat.length; i++) {
+                etat[i].setValue(etat[i].get(1) - centre.get(1) + centre.get(0), centre.get(0) - etat[i].get(0) + centre.get(1));
+            }
         }
     }
 
     public void rotACW() {
         // Rotations : (a;b) (-b;a) (-a;-b) (b;-a)
-        for (int i = 0; i < etat.length; i++) {
-            etat[i].setValue(-etat[i].get(1), etat[i].get(0));
+        // Rotation : (a;b) (a-x;b-y) (y-b;a-x) (y-b+x;a-x+y)
+        synchronized (this) {
+            for (int i = 0; i < etat.length; i++) {
+                etat[i].setValue(centre.get(1) - etat[i].get(1) + centre.get(0), etat[i].get(0) - centre.get(0) + centre.get(1));
+            }
         }
     }
 
     public Vecteur<Integer>[] getPoints() {
         Vecteur<Integer>[] temp = new Vecteur[etat.length];
-        for(int i = 0;i< etat.length;i++) temp[i] = new Vecteur(etat[i]);
+        for (int i = 0; i < etat.length; i++) {
+            temp[i] = new Vecteur(etat[i]);
+        }
         return temp;
     }
 
@@ -71,6 +81,7 @@ public class Forme {
     }
 
     public Forme(ArrayList<Vecteur> values) {
+        centre = new Vecteur();
         int taille = values.size();
         etat = new Vecteur[taille];
         for (int i = 0; i < taille; i++) {
@@ -79,12 +90,23 @@ public class Forme {
     }
 
     public Forme(String nomValue, ArrayList<Vecteur> values) {
+        centre = new Vecteur();
         int taille = values.size();
         etat = new Vecteur[taille];
         for (int i = 0; i < taille; i++) {
             etat[i] = values.get(i);
         }
         nom = nomValue;
+    }
+
+    public Forme(String nomValue, ArrayList<Vecteur> values, Vecteur _centre) {
+        int taille = values.size();
+        etat = new Vecteur[taille];
+        for (int i = 0; i < taille; i++) {
+            etat[i] = values.get(i);
+        }
+        nom = nomValue;
+        centre = _centre;
     }
 
     public static Forme Forme(int i) {
@@ -114,8 +136,9 @@ public class Forme {
         liste.add(new Vecteur(1, 1));
         liste.add(new Vecteur(1, 2));
         liste.add(new Vecteur(0, 1));
+        Vecteur<Integer> _centre = new Vecteur(1, 1);
 
-        return new Forme("T", liste);
+        return new Forme("T", liste, _centre);
     }
 
     public static Forme I() {
@@ -124,8 +147,9 @@ public class Forme {
         liste.add(new Vecteur(0, 1));
         liste.add(new Vecteur(0, 2));
         liste.add(new Vecteur(0, 3));
+        Vecteur<Integer> _centre = new Vecteur(0, 1);
 
-        return new Forme("I", liste);
+        return new Forme("I", liste, _centre);
     }
 
     public static Forme L() {
@@ -134,8 +158,9 @@ public class Forme {
         liste.add(new Vecteur(1, 1));
         liste.add(new Vecteur(1, 2));
         liste.add(new Vecteur(0, 2));
+        Vecteur<Integer> _centre = new Vecteur(1, 2);
 
-        return new Forme("L", liste);
+        return new Forme("L", liste, _centre);
     }
 
     public static Forme J() {
@@ -144,8 +169,9 @@ public class Forme {
         liste.add(new Vecteur(1, 1));
         liste.add(new Vecteur(1, 2));
         liste.add(new Vecteur(0, 0));
+        Vecteur<Integer> _centre = new Vecteur(1, 0);
 
-        return new Forme("J", liste);
+        return new Forme("J", liste, _centre);
     }
 
     public static Forme O() {
@@ -154,8 +180,9 @@ public class Forme {
         liste.add(new Vecteur(0, 1));
         liste.add(new Vecteur(1, 0));
         liste.add(new Vecteur(1, 1));
+        Vecteur<Integer> _centre = new Vecteur(0, 0);
 
-        return new Forme("O", liste);
+        return new Forme("O", liste, _centre);
     }
 
     public static Forme S() {
@@ -164,8 +191,9 @@ public class Forme {
         liste.add(new Vecteur(1, 1));
         liste.add(new Vecteur(0, 1));
         liste.add(new Vecteur(0, 2));
+        Vecteur<Integer> _centre = new Vecteur(1, 1);
 
-        return new Forme("S", liste);
+        return new Forme("S", liste, _centre);
     }
 
     public static Forme Z() {
@@ -174,8 +202,9 @@ public class Forme {
         liste.add(new Vecteur(1, 1));
         liste.add(new Vecteur(0, 1));
         liste.add(new Vecteur(1, 2));
+        Vecteur<Integer> _centre = new Vecteur(0, 1);
 
-        return new Forme("Z", liste);
+        return new Forme("Z", liste, _centre);
     }
 
     public int[][] minMax() {

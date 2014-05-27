@@ -23,8 +23,8 @@ public class Score extends JLabel{
         super("Score : 0");
         Font police = new Font("Arial", Font.BOLD, 20);
         this.setFont(police);
-        this.setPreferredSize(new Dimension(100, 20));
-        this.setHorizontalAlignment(JLabel.CENTER);
+        this.setPreferredSize(new Dimension(200, 20));
+        this.setHorizontalAlignment(JLabel.RIGHT);
     }
     
     public void setScore(int score){

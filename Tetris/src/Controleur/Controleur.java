@@ -13,16 +13,17 @@ import java.awt.event.KeyListener;
  *
  * @author Dimitri
  */
-public class Controleur implements KeyListener{
+public class Controleur implements KeyListener {
 
     private final Modele plateau;
 
     public Controleur(Modele _plateau) {
         plateau = _plateau;
     }
-    
+
     @Override
     public void keyTyped(KeyEvent e) {
+        boolean pause;
         switch (e.getKeyChar()) {
             case 'l':
                 plateau.rotACW();
@@ -39,27 +40,31 @@ public class Controleur implements KeyListener{
             case 's':
                 plateau.modifierVitesse(4);
                 break;
+            case KeyEvent.VK_ESCAPE:
+                synchronized (plateau) {
+                    pause = plateau.getPause();
+                }
+                if (pause) {
+                    plateau.play();
+                } else {
+                    plateau.pause();
+                }
+                break;
             default:
                 //nope
                 break;
         }
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            if (plateau.getPause()) {
-                plateau.play();
-            } else {
-                plateau.pause();
-            }
-        }
+        
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {  
+    public void keyPressed(KeyEvent e) {
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyChar() == 's') {
-            plateau.modifierVitesse(0.5f);
-        } 
+            plateau.resetVitesse();
+        }
     }
 }

@@ -16,7 +16,7 @@ public class Plateau {
 
     private static final Random rand = new Random();
     private Piece courante;
-    private Piece[] suivantes;
+    private Piece[] suivantes;    
     private Vecteur<Integer> position;
     private Vecteur<Float> positionReelle;
     private int[][] plateau;
@@ -65,11 +65,11 @@ public class Plateau {
 
     public boolean descendre(float vitesse) {
         boolean colision = false;
-        int DX = (int) (positionReelle.get(0) + vitesse/4) - position.get(0), max;
+        int DX = (int) (positionReelle.get(0) + vitesse / 4) - position.get(0), max;
         Forme tempForme = new Forme(courante.getForme());
         Vecteur<Integer> temp = new Vecteur();
-        
-        for (max=1; max <=DX; max++){
+
+        for (max = 1; max <= DX; max++) {
             for (int i = 0; i < tempForme.getPoints().length; i++) {
                 temp.setValue(getVecteur(i).get(0).intValue() + max, getVecteur(i).get(1).intValue());
                 if (!isEmpty(temp)) {
@@ -82,11 +82,12 @@ public class Plateau {
             }
         }
         max--;
-        if (max==0&&colision)return true;
-        if (DX==max){
-                positionReelle.setValue(positionReelle.get(0) + vitesse/4, positionReelle.get(1));
+        if (max == 0 && colision) {
+            return true;
         }
-        else {
+        if (DX == max) {
+            positionReelle.setValue(positionReelle.get(0) + vitesse / 4, positionReelle.get(1));
+        } else {
             positionReelle.setValue(positionReelle.get(0) + max, positionReelle.get(1));
         }
         return false;
@@ -174,27 +175,17 @@ public class Plateau {
         }
     }
 
-    private void deleteLine(int i) {
-        int j, k;
-        if (i == 0) {
-            for (j = 0; j < tailleY; j++) {
-                plateau[0][j] = 0;
-            }
-        } else {
-            for (j = 0; j < tailleY; j++) {
-                for (k = tailleX-2; k > i  ; k--) {
-                    plateau[k+1][j] = plateau[k][j];
-                }
-            }
-        }
-    }
-
     public void deleteLines(int[] indices) {
+        int j, k;
         if (indices != null) {
             for (int i = 0; i < indices.length; i++) {
-                deleteLine(i);
+                for (k = indices[i]+i; k > 0; k--) {
+                    for (j = 0; j < tailleY; j++) {
+                        plateau[k][j] = plateau[k - 1][j];
+                    }
+                }
+                System.out.println(indices[i]);
             }
-            drawCourante();
         }
     }
 
@@ -220,10 +211,9 @@ public class Plateau {
         for (i = tailleX - 1; i >= 0; i--) {
             k = 0;
             for (j = 0; j < tailleY; j++) {
-                if (plateau[i][j] == 0) {
-                    break;
+                if (plateau[i][j] != 0) {
+                    k++;
                 }
-                k++;
             }
             if (k == tailleY) {
                 temp.add(i);

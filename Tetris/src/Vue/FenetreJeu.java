@@ -26,6 +26,7 @@ public class FenetreJeu extends Vue implements Observer {
 
     public FenetreJeu(Modele plateau) {
         super();
+
         score = new Score();
         grid = new GrilleTetris(plateau.getTailleX(), plateau.getTailleY(), 2);
         pieces = new Reserve(plateau.getSuivantes(), plateau.getSuivantes().length);
@@ -33,7 +34,7 @@ public class FenetreJeu extends Vue implements Observer {
         ImageIcon icon = new ImageIcon(scaleImage(new ImageIcon(getClass().getResource("/images/tetris-logo.png")).getImage(), 400, 150, 50));
         titre = new JLabel(icon);
         titre.setPreferredSize(new Dimension(this.getWidth(), 200));
-        
+
         this.getContentPane().add(titre, BorderLayout.NORTH);
         this.getContentPane().add(score, BorderLayout.WEST);
         this.getContentPane().add(grid, BorderLayout.CENTER);
@@ -43,22 +44,24 @@ public class FenetreJeu extends Vue implements Observer {
     }
 
     public void updateGrid(Modele plateau) {
-            grid.updateGrid(plateau.getColorGrid());
-            pieces.updatePiece(plateau.getSuivantes());
-        }
+        grid.updateGrid(plateau.getColorGrid());
+        pieces.updatePiece(plateau.getSuivantes());
+    }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o instanceof Modele){
-                Modele plateau = (Modele) o;
-                updateGrid(plateau);
-            }
+        if (o instanceof Modele) {
             this.getContentPane().remove(score);
             this.getContentPane().remove(grid);
             this.getContentPane().remove(pieces);
-            this.getContentPane().add(score, BorderLayout.WEST);
-            this.getContentPane().add(grid, BorderLayout.CENTER);
-            this.getContentPane().add(pieces, BorderLayout.EAST);
-            this.getContentPane().repaint();
+            Modele plateau = (Modele) o;
+            updateGrid(plateau);
+            score.setScore(plateau.getScore());
+
+        }
+        this.getContentPane().add(score, BorderLayout.WEST);
+        this.getContentPane().add(grid, BorderLayout.CENTER);
+        this.getContentPane().add(pieces, BorderLayout.EAST);
+        this.getContentPane().repaint();
     }
 }

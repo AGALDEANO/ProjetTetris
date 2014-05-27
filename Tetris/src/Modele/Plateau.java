@@ -65,32 +65,31 @@ public class Plateau {
 
     public boolean descendre(float vitesse) {
         boolean colision = false;
-        int DX = (int) (positionReelle.get(0) + vitesse) - position.get(0), max = 1;
+        int DX = (int) (positionReelle.get(0) + vitesse/4) - position.get(0), max;
         Forme tempForme = new Forme(courante.getForme());
         Vecteur<Integer> temp = new Vecteur();
-
-        while (DX > 0) {
+        
+        for (max=1; max <=DX; max++){
             for (int i = 0; i < tempForme.getPoints().length; i++) {
-                temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue());
+                temp.setValue(getVecteur(i).get(0).intValue() + max, getVecteur(i).get(1).intValue());
                 if (!isEmpty(temp)) {
                     colision = true;
                     break;
                 }
             }
-            if (!colision) {
+            if (colision) {
                 break;
-            } else {
-                colision = false;
             }
-            DX--;
         }
-        if (DX == 0) {
-            return true;
-        } else {
-            positionReelle.setValue(positionReelle.get(0) + DX, positionReelle.get(1));
-            return false;
+        max--;
+        if (max==0&&colision)return true;
+        if (DX==max){
+                positionReelle.setValue(positionReelle.get(0) + vitesse/4, positionReelle.get(1));
         }
-
+        else {
+            positionReelle.setValue(positionReelle.get(0) + max, positionReelle.get(1));
+        }
+        return false;
     }
 
     private boolean deplacement(int deplacement) {

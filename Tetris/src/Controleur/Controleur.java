@@ -36,6 +36,9 @@ public class Controleur implements KeyListener{
             case 'q':
                 plateau.deplacementGauche();
                 break;
+            case 's':
+                plateau.modifierVitesse(4);
+                break;
             default:
                 //nope
                 break;
@@ -50,16 +53,13 @@ public class Controleur implements KeyListener{
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyChar() == 's') {
-            plateau.modifierVitesse(2);
-        }
+    public void keyPressed(KeyEvent e) {  
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyChar() == 's') {
-            plateau.modifierVitesse(1);
+            plateau.modifierVitesse(0.5f);
         } 
     }
 }

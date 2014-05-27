@@ -6,35 +6,28 @@
 package Modele;
 
 import java.util.ArrayList;
-import java.util.Observable;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author 4lexandre
  */
-public class Plateau extends Observable implements Runnable{
-
-    private boolean pause = false;
-    private int rotation = 0;
-    private int deplacement = 0;
+public class Plateau {
     private static final Random rand = new Random();
-    private boolean fin = false;
     private Piece courante;
     private Piece[] suivantes;
     private Vecteur<Integer> position;
-    private Float vitesse;
     private Vecteur<Float> positionReelle;
     private int[][] plateau;
-    private int tailleX = 20;
-    private int tailleY = 10;
-    private int nombreSuivantes = 3;
+    private final int tailleX;
+    private final int tailleY;
+    private final int nombreSuivantes;
 
     public Plateau() {
+        tailleX = 20;
+        tailleY = 10;
+        nombreSuivantes = 3;
         plateau = new int[tailleX][tailleY];
-        vitesse = 1f;
         suivantes = new Piece[nombreSuivantes];
         courante = Piece.randPiece();
         int[][] minMax = courante.getForme().minMax();
@@ -47,7 +40,7 @@ public class Plateau extends Observable implements Runnable{
         }
     }
 
-    private void nouvellePiece() {
+    public void nouvellePiece() {
         courante = suivantes[0];
         int i;
         for (i = 0; i < suivantes.length - 1; i++) {
@@ -59,120 +52,87 @@ public class Plateau extends Observable implements Runnable{
         randY = rand.nextInt(tailleY - (minMax[1][1] - minMax[1][0]));
         position = new Vecteur(0, randY);
         positionReelle = new Vecteur(position.get(0).floatValue(), position.get(1).floatValue());
-        vitesse = 1f;
+    }    
+    
+    public void updatePosition(int deplacement, int rotation) {
+        rotation(rotation);
+        deplacement(deplacement);
+        position.setValue(positionReelle.get(0).intValue(), positionReelle.get(1).intValue());
     }
     
-    public boolean getFin()
-    {
-        return fin;
-    }
-    
-    public boolean getPause()
-    {
-        return pause;
-    }
-
-    private boolean updatePosition() {
+    public boolean descendre(float vitesse ){
         boolean colision = false;
-        int DX;
-        Vecteur<Integer> temp = new Vecteur();
-
-        if (rotation != 0 && deplacement != 0) {
-            Forme tempForme = new Forme(courante.getForme());
-            if (rotation == -1) {
-                tempForme.rotACW();
-            } else if (rotation == 1) {
-                tempForme.rotCW();
-            }
-            DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
-            if (DX != 0) {
-                for (int i = 0; i < tempForme.getPoints().length; i++) {
-                    temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue() + deplacement);
-                    if (!isEmpty(temp)) {
-                        colision = true;
-                        break;
-                    }
-                }
-            }
-            if (!colision) {
-                positionReelle.setValue(positionReelle.get(0) + vitesse, positionReelle.get(1) + deplacement);
-                if (rotation == -1) {
-                    courante.rotACW();
-                } else if (rotation == 1) {
-                    courante.rotCW();
-                }
-                deplacement = 0;
-                rotation = 0;
-                return colision;
-            } else {
-                colision = false;
-            }
-        }
-        if (rotation != 0) {
-            Forme tempForme = new Forme(courante.getForme());
-            if (rotation == -1) {
-                tempForme.rotCW();
-            } else if (rotation == 1) {
-                tempForme.rotACW();
-            }
-            DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
-            if (DX != 0) {
-                for (int i = 0; i < tempForme.getPoints().length; i++) {
-                    temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue());
-                    if (!isEmpty(temp)) {
-                        colision = true;
-                        break;
-                    }
-                }
-            }
-            if (!colision) {
-                positionReelle.setValue(positionReelle.get(0) + vitesse, positionReelle.get(1));
-                if (rotation == -1) {
-                    courante.rotACW();
-                } else if (rotation == 1) {
-                    courante.rotCW();
-                }
-                rotation = 0;
-                return colision;
-            } else {
-                colision = false;
-            }
-        }
-        if (deplacement != 0) {
-            Forme tempForme = new Forme(courante.getForme());
-
-            DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
-            if (DX != 0) {
-                for (int i = 0; i < tempForme.getPoints().length; i++) {
-                    temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue() + deplacement);
-                    if (!isEmpty(temp)) {
-                        colision = true;
-                        break;
-                    }
-                }
-            }
-            if (!colision) {
-                positionReelle.setValue(positionReelle.get(0) + vitesse, positionReelle.get(1) + deplacement);
-                deplacement = 0;
-                return colision;
-            } else {
-                colision = false;
-            }
-        }
+        int DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
         Forme tempForme = new Forme(courante.getForme());
-        DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
-        if (DX != 0) {
+        Vecteur<Integer> temp = new Vecteur();
+        
+        while (DX > 0) {
             for (int i = 0; i < tempForme.getPoints().length; i++) {
-                temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue());
+                temp.setValue(getVecteur(i).get(0).intValue() + 1, getVecteur(i).get(1).intValue());
                 if (!isEmpty(temp)) {
                     colision = true;
                     break;
                 }
             }
+            DX--;
+            if (colision) break;
         }
         if (!colision) {
             positionReelle.setValue(positionReelle.get(0) + vitesse, positionReelle.get(1));
-            deplacement = 0;
+        }
+        return colision;
+    }
+    
+    private boolean deplacement(int deplacement){
+        boolean colision=false;
+        Vecteur<Integer> temp = new Vecteur();
+        if (deplacement != 0) {
+            eraseCourante();
+            Forme tempForme = new Forme(courante.getForme());
+
+            for (int i = 0; i < tempForme.getPoints().length; i++) {
+                temp.setValue(getVecteur(i).get(0).intValue(), getVecteur(i).get(1).intValue() + deplacement);
+                if (!isEmpty(temp)) {
+                    colision = true;
+                    break;
+                }
+            }
+            if (!colision) {
+                positionReelle.setValue(positionReelle.get(0), positionReelle.get(1) + deplacement);
+            }
+            drawCourante();
+        }
+        return colision;
+    }
+    
+    private boolean rotation(int rotation){
+        boolean colision=false;
+        Vecteur<Integer> temp = new Vecteur();
+        
+        if (rotation != 0) {
+            eraseCourante();
+            Forme tempForme = new Forme(courante.getForme());
+            if (rotation == -1) {
+                tempForme.rotCW();
+            } else if (rotation == 1) {
+                tempForme.rotACW();
+            }
+            for (int i = 0; i < tempForme.getPoints().length; i++) {
+                temp.setValue(getVecteur(i).get(0).intValue(), getVecteur(i).get(1).intValue());
+                if (!isEmpty(temp)) {
+                    colision = true;
+                    break;
+                }
+            }
+            if (!colision) {
+                positionReelle.setValue(positionReelle.get(0), positionReelle.get(1));
+                if (rotation == -1) {
+                    courante.rotACW();
+                } else if (rotation == 1) {
+                    courante.rotCW();
+                }
+            }
+            drawCourante();
         }
         return colision;
     }
@@ -189,75 +149,7 @@ public class Plateau extends Observable implements Runnable{
         }
     }
 
-    public void pause() {
-        pause = true;
-    }
-    public void play() {
-        pause = false;
-    }
-
-    public void rotCW() {
-        rotation = 1;
-    }
-
-    public void rotACW() {
-        rotation = -1;
-    }
-
-    public void deplacementGauche() {
-        deplacement = -1;
-    }
-
-    public void deplacementDroite() {
-        deplacement = 1;
-    }
-
-    public void modifierVitesse(float c) {
-        vitesse *= c;
-    }
-
-    public void run() {
-        drawCourante();
-        while (!fin) {
-            if (pause) {
-                try {
-                    wait();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            update();
-            try {
-                Thread.sleep(400);
-                update();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Plateau.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-    }
-
-    private int[] update() {
-        eraseCourante();
-        int i;
-        if (updatePosition()) {
-            drawCourante();
-            int[] lines = checkLines();
-            deleteLines(lines);
-            nouvellePiece();
-            for(i=0;i<tailleY;i++) if(plateau[0][i]!=0) fin = true;
-            drawCourante();
-            return lines;
-        } else {
-            position.setValue(positionReelle.get(0).intValue(), positionReelle.get(1).intValue());
-        }
-        drawCourante();
-        setChanged();
-        notifyObservers();
-        return null;
-    }
-
-    private void eraseCourante() {
+    public void eraseCourante() {
         Forme temp = courante.getForme();
         int taille = temp.getPoints().length;
         int x, y;
@@ -268,7 +160,7 @@ public class Plateau extends Observable implements Runnable{
         }
     }
 
-    private void drawCourante() {
+    public void drawCourante() {
         Forme temp = courante.getForme();
         int x, y;
         int taille = temp.getPoints().length;
@@ -294,7 +186,7 @@ public class Plateau extends Observable implements Runnable{
         }
     }
 
-    private void deleteLines(int[] indices) {
+    public void deleteLines(int[] indices) {
         if (indices != null) {
             for (int i = 0; i < indices.length; i++) {
                 deleteLine(i);
@@ -319,7 +211,7 @@ public class Plateau extends Observable implements Runnable{
         return -1;//Ligne pleine
     }
 
-    private int[] checkLines() {
+    public int[] checkLines() {
         ArrayList<Integer> temp = new ArrayList<>();
         int i, j, k;
         for (i = tailleX - 1; i > 0; i--) {
@@ -367,7 +259,7 @@ public class Plateau extends Observable implements Runnable{
     public Piece getCourante() {
         return courante;
     }
-
+    
     private Vecteur getVecteur(int i) {
 
         return new Vecteur(courante.getForme().getPoints(i).get(0) + position.get(0), courante.getForme().getPoints(i).get(1) + position.get(1));

@@ -23,7 +23,6 @@ public abstract class Vue extends JFrame{
         this.setTitle("Tetris");
         this.setSize(800, 700);
         this.setResizable(false);
-        this.setBackground(Color.BLACK);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -39,5 +38,5 @@ public abstract class Vue extends JFrame{
         g.drawImage(source, 0, 0, width, height + gap, null);
         g.dispose();
     return img;
-}
+    }
 }

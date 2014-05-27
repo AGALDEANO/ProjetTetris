@@ -6,7 +6,7 @@
 package tetris;
 
 import Controleur.Controleur;
-import Modele.Plateau;
+import Modele.Modele;
 import Vue.FenetreJeu;
 
 /**
@@ -16,7 +16,7 @@ import Vue.FenetreJeu;
 public class Main {
 
     public static void main(String[] args) {
-        Plateau plateau = new Plateau();
+        Modele plateau = new Modele();
         Controleur controleur = new Controleur(plateau);
         FenetreJeu fenetre = new FenetreJeu(plateau);
         

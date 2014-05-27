@@ -5,10 +5,8 @@
  */
 package Vue;
 
-import Modele.Piece;
-import Modele.Plateau;
+import Modele.Modele;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Observable;
 import java.util.Observer;
@@ -26,7 +24,7 @@ public class FenetreJeu extends Vue implements Observer {
     private Reserve pieces;
     private JLabel titre;
 
-    public FenetreJeu(Plateau plateau) {
+    public FenetreJeu(Modele plateau) {
         super();
         score = new Score();
         grid = new GrilleTetris(plateau.getTailleX(), plateau.getTailleY(), 2);
@@ -44,32 +42,23 @@ public class FenetreJeu extends Vue implements Observer {
         this.setVisible(true);
     }
 
-    public void updateGrid(Plateau plateau) {
-            Color[][] tab = new Color[plateau.getTailleX()][plateau.getTailleY()];
-
-            for (int i = 0; i < plateau.getTailleX(); i++) {
-                for (int j = 0; j < plateau.getTailleY(); j++) {
-                    Color color = Piece.getColor(plateau.getPlateau()[i][j]);
-                    tab[i][j] = color;
-                }
-            }
-            grid.updateGrid(tab);
+    public void updateGrid(Modele plateau) {
+            grid.updateGrid(plateau.getColorGrid());
             pieces.updatePiece(plateau.getSuivantes());
         }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o instanceof Plateau){
-                Plateau plateau = (Plateau) o;
+        if (o instanceof Modele){
+                Modele plateau = (Modele) o;
                 updateGrid(plateau);
-                pieces = new Reserve(plateau.getSuivantes(), plateau.getSuivantes().length);
             }
-            this.getContentPane().removeAll();
-            this.getContentPane().add(titre, BorderLayout.NORTH);
+            this.getContentPane().remove(score);
+            this.getContentPane().remove(grid);
+            this.getContentPane().remove(pieces);
             this.getContentPane().add(score, BorderLayout.WEST);
             this.getContentPane().add(grid, BorderLayout.CENTER);
             this.getContentPane().add(pieces, BorderLayout.EAST);
-            this.getContentPane().revalidate();
             this.getContentPane().repaint();
     }
 }

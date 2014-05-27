@@ -5,10 +5,9 @@
  */
 package Controleur;
 
-import Modele.Plateau;
+import Modele.Modele;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 /**
  *
@@ -16,9 +15,9 @@ import java.util.ArrayList;
  */
 public class Controleur implements KeyListener{
 
-    private final Plateau plateau;
+    private final Modele plateau;
 
-    public Controleur(Plateau _plateau) {
+    public Controleur(Modele _plateau) {
         plateau = _plateau;
     }
     
@@ -60,7 +59,7 @@ public class Controleur implements KeyListener{
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyChar() == 's') {
-            plateau.modifierVitesse(1 / 2);
+            plateau.modifierVitesse(1);
         } 
     }
 }

@@ -13,6 +13,7 @@ import java.util.Random;
  * @author 4lexandre
  */
 public class Plateau {
+
     private static final Random rand = new Random();
     private Piece courante;
     private Piece[] suivantes;
@@ -52,42 +53,50 @@ public class Plateau {
         randY = rand.nextInt(tailleY - (minMax[1][1] - minMax[1][0]));
         position = new Vecteur(0, randY);
         positionReelle = new Vecteur(position.get(0).floatValue(), position.get(1).floatValue());
-    }    
-    
+    }
+
     public void updatePosition(int deplacement, int rotation) {
+        eraseCourante();
         rotation(rotation);
         deplacement(deplacement);
         position.setValue(positionReelle.get(0).intValue(), positionReelle.get(1).intValue());
+        drawCourante();
     }
-    
-    public boolean descendre(float vitesse ){
+
+    public boolean descendre(float vitesse) {
         boolean colision = false;
-        int DX = (int) (positionReelle.get(0) + vitesse) - position.get(0);
+        int DX = (int) (positionReelle.get(0) + vitesse) - position.get(0), max = 1;
         Forme tempForme = new Forme(courante.getForme());
         Vecteur<Integer> temp = new Vecteur();
-        
+
         while (DX > 0) {
             for (int i = 0; i < tempForme.getPoints().length; i++) {
-                temp.setValue(getVecteur(i).get(0).intValue() + 1, getVecteur(i).get(1).intValue());
+                temp.setValue(getVecteur(i).get(0).intValue() + DX, getVecteur(i).get(1).intValue());
                 if (!isEmpty(temp)) {
                     colision = true;
                     break;
                 }
             }
+            if (!colision) {
+                break;
+            } else {
+                colision = false;
+            }
             DX--;
-            if (colision) break;
         }
-        if (!colision) {
-            positionReelle.setValue(positionReelle.get(0) + vitesse, positionReelle.get(1));
+        if (DX == 0) {
+            return true;
+        } else {
+            positionReelle.setValue(positionReelle.get(0) + DX, positionReelle.get(1));
+            return false;
         }
-        return colision;
+
     }
-    
-    private boolean deplacement(int deplacement){
-        boolean colision=false;
+
+    private boolean deplacement(int deplacement) {
+        boolean colision = false;
         Vecteur<Integer> temp = new Vecteur();
         if (deplacement != 0) {
-            eraseCourante();
             Forme tempForme = new Forme(courante.getForme());
 
             for (int i = 0; i < tempForme.getPoints().length; i++) {
@@ -100,17 +109,15 @@ public class Plateau {
             if (!colision) {
                 positionReelle.setValue(positionReelle.get(0), positionReelle.get(1) + deplacement);
             }
-            drawCourante();
         }
         return colision;
     }
-    
-    private boolean rotation(int rotation){
-        boolean colision=false;
+
+    private boolean rotation(int rotation) {
+        boolean colision = false;
         Vecteur<Integer> temp = new Vecteur();
-        
+
         if (rotation != 0) {
-            eraseCourante();
             Forme tempForme = new Forme(courante.getForme());
             if (rotation == -1) {
                 tempForme.rotCW();
@@ -132,7 +139,6 @@ public class Plateau {
                     courante.rotCW();
                 }
             }
-            drawCourante();
         }
         return colision;
     }
@@ -259,7 +265,7 @@ public class Plateau {
     public Piece getCourante() {
         return courante;
     }
-    
+
     private Vecteur getVecteur(int i) {
 
         return new Vecteur(courante.getForme().getPoints(i).get(0) + position.get(0), courante.getForme().getPoints(i).get(1) + position.get(1));

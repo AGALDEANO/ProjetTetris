@@ -6,9 +6,6 @@
 package Modele;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author p1106501

@@ -118,21 +118,19 @@ public class Plateau {
         Vecteur<Integer> temp = new Vecteur();
 
         if (rotation != 0) {
-            Forme tempForme = new Forme(courante.getForme());
             if (rotation == -1) {
-                tempForme.rotCW();
+                courante.rotCW();
             } else if (rotation == 1) {
-                tempForme.rotACW();
+                courante.rotACW();
             }
-            for (int i = 0; i < tempForme.getPoints().length; i++) {
-                temp.setValue(getVecteur(i).get(0).intValue(), getVecteur(i).get(1).intValue());
+            for (Vecteur<Integer> point : courante.getForme().getPoints()) {
+                temp.setValue(point.get(0).intValue() + position.get(0), point.get(1).intValue() + position.get(1));
                 if (!isEmpty(temp)) {
                     colision = true;
                     break;
                 }
             }
-            if (!colision) {
-                positionReelle.setValue(positionReelle.get(0), positionReelle.get(1));
+            if (colision) {
                 if (rotation == -1) {
                     courante.rotACW();
                 } else if (rotation == 1) {
@@ -185,8 +183,8 @@ public class Plateau {
             }
         } else {
             for (j = 0; j < tailleY; j++) {
-                for (k = i; k > 0; k--) {
-                    plateau[k][j] = plateau[k - 1][j];
+                for (k = tailleX-2; k > i  ; k--) {
+                    plateau[k+1][j] = plateau[k][j];
                 }
             }
         }
@@ -204,7 +202,7 @@ public class Plateau {
     public int checkLine(int[] line) {
         int i;
         boolean test = (line[0] == 0);
-        for (i = 1; i < line.length; i++) {
+        for (i = 0; i < line.length; i++) {
             if ((line[i] == 0) != test) {
                 break;
             }
@@ -220,7 +218,7 @@ public class Plateau {
     public int[] checkLines() {
         ArrayList<Integer> temp = new ArrayList<>();
         int i, j, k;
-        for (i = tailleX - 1; i > 0; i--) {
+        for (i = tailleX - 1; i >= 0; i--) {
             k = 0;
             for (j = 0; j < tailleY; j++) {
                 if (plateau[i][j] == 0) {

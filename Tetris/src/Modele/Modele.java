@@ -25,7 +25,7 @@ public class Modele extends Observable implements Runnable{
     public Modele (){
         pause = false;
         fin = false;
-        vitesse = 1f;
+        vitesse = 0.5f;
         plateau = new Plateau();
         timer = new Timer();
         score = 0;
@@ -107,7 +107,7 @@ public class Modele extends Observable implements Runnable{
             timer.cancel();
             timer.purge();
             timer=new Timer();
-            timer.scheduleAtFixedRate(new Timing(this), 0, 1000);
+            timer.scheduleAtFixedRate(new Timing(this), 0, 100);
         }
         
     }
@@ -139,8 +139,8 @@ public class Modele extends Observable implements Runnable{
     
     @Override
     public void run() {
-        timer.scheduleAtFixedRate(new Timing(this), 1000, 1000);
-        while (!fin) {
+        timer.scheduleAtFixedRate(new Timing(this), 1000, 100);
+        if (!fin) {
         }
     }
 }

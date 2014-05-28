@@ -25,10 +25,10 @@ public class Controleur implements KeyListener {
     public void keyTyped(KeyEvent e) {
         boolean pause;
         switch (e.getKeyChar()) {
-            case 'l':
+            case 'g':
                 plateau.rotACW();
                 break;
-            case 'm':
+            case 'f':
                 plateau.rotCW();
                 break;
             case 'd':

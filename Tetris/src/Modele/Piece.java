@@ -19,7 +19,7 @@ public class Piece {
     private ImageIcon frame;
     private int idColor;
     private static final Random rand = new Random();
-    private static final int nombrePieces = 7;
+    private static final int nombrePieces = 9;
     
     public Piece(int _forme, int _couleur){
         forme= Forme.Forme(_forme);
@@ -78,8 +78,11 @@ public class Piece {
             case(Forme._O):
                 frame=new ImageIcon (getClass().getResource("/images/Frames/jaune.png"));
                 break;
-            case(Forme._X):
-                frame=new ImageIcon (getClass().getResource("/images/Frames/rose.png"));
+            case(Forme._P):
+                frame=new ImageIcon (getClass().getResource("/images/Frames/gris.png"));
+                break;
+            case(Forme._U):
+                frame=new ImageIcon (getClass().getResource("/images/Frames/blanc.png"));
                 break;
             default:
                 frame=new ImageIcon (getClass().getResource("/images/Frames/vertClair.png"));

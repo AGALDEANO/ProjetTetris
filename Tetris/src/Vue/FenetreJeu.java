@@ -79,7 +79,10 @@ public class FenetreJeu extends Vue implements Observer {
             Modele plateau = (Modele) o;
             updateGrid(plateau);
             score.setScore(plateau.getScore(),plateau.getNbLignes());
-
+            if (plateau.getFin()){
+                this.setVisible(false);
+                GameOver fenetre = new GameOver(score.getScore(), score.getNbLigne());
+            }
         }
         this.getContentPane().add(score, BorderLayout.WEST);
         this.getContentPane().add(grid, BorderLayout.CENTER);

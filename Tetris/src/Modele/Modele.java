@@ -34,6 +34,16 @@ public class Modele extends Observable implements Runnable {
         score = 0;
         nbLignes=0;
     }
+    public Modele(int i) {
+        pause = false;
+        fin = false;
+        vitesseBase = 0.5f;
+        vitesse = vitesseBase;
+        plateau = new Plateau(i);
+        timer = new Timer();
+        score = 0;
+        nbLignes=0;
+    }
 
     public int getNbLignes() {
         return nbLignes;
@@ -134,6 +144,13 @@ public class Modele extends Observable implements Runnable {
         }
 
     }
+    
+    private void quitter()
+    {
+        timer.cancel();
+        timer.purge();
+        
+    }
 
     public void update() {
         int i;
@@ -151,8 +168,9 @@ public class Modele extends Observable implements Runnable {
                 resetVitesse();
             }
             for (i = 0; i < plateau.getTailleY(); i++) {
-                if (plateau.getPlateau()[0][i] != 0) {
+                if (plateau.getPlateau()[plateau.limite][i] != 0) {
                     fin = true;
+                    quitter();
                 }
             }
         } else {
@@ -171,10 +189,5 @@ public class Modele extends Observable implements Runnable {
     @Override
     public void run() {
         timer.scheduleAtFixedRate(new Timing(this), 1000, 100);
-        while (!fin) {
-            
-        }
-        timer.cancel();
-        timer.purge();
     }
 }

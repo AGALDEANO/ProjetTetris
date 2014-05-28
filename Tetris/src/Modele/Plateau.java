@@ -23,6 +23,8 @@ public class Plateau {
     private final int tailleX;
     private final int tailleY;
     private final int nombreSuivantes;
+    private int nombrePieces = 7;
+    public final int limite = 2;
 
     public Plateau() {
         tailleX = 20;
@@ -30,14 +32,32 @@ public class Plateau {
         nombreSuivantes = 3;
         plateau = new int[tailleX][tailleY];
         suivantes = new Piece[nombreSuivantes];
-        courante = Piece.randPiece();
+        courante = Piece.randPiece(nombrePieces);
         int[][] minMax = courante.getForme().minMax();
         int randY;
         randY = rand.nextInt(tailleY - (minMax[1][1] - minMax[1][0]));
         position = new Vecteur(0, randY);
         positionReelle = new Vecteur(position.get(0).floatValue(), position.get(1).floatValue());
         for (int i = 0; i < suivantes.length; i++) {
-            suivantes[i] = Piece.randPiece();
+            suivantes[i] = Piece.randPiece(nombrePieces);
+        }
+    }
+    public Plateau(int i) {
+        nombrePieces=i<1?1:i;
+        nombrePieces=i>Piece.nombrePieces?Piece.nombrePieces:i;
+        tailleX = 20;
+        tailleY = 10;
+        nombreSuivantes = 3;
+        plateau = new int[tailleX][tailleY];
+        suivantes = new Piece[nombreSuivantes];
+        courante = Piece.randPiece(nombrePieces);
+        int[][] minMax = courante.getForme().minMax();
+        int randY;
+        randY = rand.nextInt(tailleY - (minMax[1][1] - minMax[1][0]));
+        position = new Vecteur(0, randY);
+        positionReelle = new Vecteur(position.get(0).floatValue(), position.get(1).floatValue());
+        for (int in = 0; in < suivantes.length; in++) {
+            suivantes[in] = Piece.randPiece(nombrePieces);
         }
     }
 
@@ -47,7 +67,7 @@ public class Plateau {
         for (i = 0; i < suivantes.length - 1; i++) {
             suivantes[i] = suivantes[i + 1];
         }
-        suivantes[i] = Piece.randPiece();
+        suivantes[i] = Piece.randPiece(nombrePieces);
         int[][] minMax = courante.getForme().minMax();
         int randY;
         randY = rand.nextInt(tailleY - (minMax[1][1] - minMax[1][0]));

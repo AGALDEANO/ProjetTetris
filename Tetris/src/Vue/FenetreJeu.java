@@ -45,24 +45,26 @@ public class FenetreJeu extends Vue implements Observer {
     }
 
     public void updateGrid(final Modele plateau) {
-        if(!SwingUtilities.isEventDispatchThread()){
-            SwingUtilities.invokeLater(new Runnable() {
+        if (!plateau.getFin()) {
+            if (!SwingUtilities.isEventDispatchThread()) {
+                SwingUtilities.invokeLater(new Runnable() {
 
-                @Override
-                public void run() {
-                    updateGrid(plateau);
-                }
-            });
-            
-            return;
+                    @Override
+                    public void run() {
+                        updateGrid(plateau);
+                    }
+                });
+
+                return;
+            }
+            grid.updateGrid(plateau.getColorGrid());
+            pieces.updatePiece(plateau.getSuivantes());
         }
-        grid.updateGrid(plateau.getColorGrid());
-        pieces.updatePiece(plateau.getSuivantes());
     }
 
     @Override
     public void update(final Observable o, final Object arg) {
-        if(!SwingUtilities.isEventDispatchThread()){
+        if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
@@ -78,7 +80,7 @@ public class FenetreJeu extends Vue implements Observer {
             this.getContentPane().remove(pieces);
             Modele plateau = (Modele) o;
             updateGrid(plateau);
-            score.setScore(plateau.getScore(),plateau.getNbLignes());
+            score.setScore(plateau.getScore(), plateau.getNbLignes());
 
         }
         this.getContentPane().add(score, BorderLayout.WEST);

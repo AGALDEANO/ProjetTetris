@@ -25,8 +25,26 @@ public class Controleur implements KeyListener {
     public void keyTyped(KeyEvent e) {
         boolean pause;
         switch (e.getKeyChar()) {
+            // Joueur
             
+            case 'q':
+                plateau.deplacementGauche();
+                break;
+            case 's':
+                plateau.modifierVitesse(4.0f*plateau.getVitesseBase());
+                break;
+            case 'd':
+                plateau.deplacementDroite();
+                break;
+            case 'l':
+                plateau.rotCW();
+                break;
+            case 'm':
+                plateau.rotACW();
+                break;
+                
             // Joueur1
+            /*
             case 'q':
                 plateau.deplacementGauche();
                 break;
@@ -42,8 +60,9 @@ public class Controleur implements KeyListener {
             case 'g':
                 plateau.rotACW();
                 break;
-                
+                */
             // Joueur2
+                /*
             case '1':
                 plateau.deplacementGauche();
                 break;
@@ -59,7 +78,7 @@ public class Controleur implements KeyListener {
             case '9':
                 plateau.rotACW();
                 break;
-                
+                */
             case KeyEvent.VK_ESCAPE:
                 synchronized (plateau) {
                     pause = plateau.getPause();

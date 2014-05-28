@@ -12,6 +12,7 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -31,9 +32,9 @@ public class FenetreJeu extends Vue implements Observer {
         grid = new GrilleTetris(plateau.getTailleX(), plateau.getTailleY(), 2);
         pieces = new Reserve(plateau.getSuivantes(), plateau.getSuivantes().length);
 
-        ImageIcon icon = new ImageIcon(scaleImage(new ImageIcon(getClass().getResource("/images/tetris-logo.png")).getImage(), 400, 150, 50));
+        ImageIcon icon = new ImageIcon(scaleImage(new ImageIcon(getClass().getResource("/images/tetris-logo.png")).getImage(), 400, 100, 0));
         titre = new JLabel(icon);
-        titre.setPreferredSize(new Dimension(this.getWidth(), 200));
+        titre.setPreferredSize(new Dimension(this.getWidth(), 100));
 
         this.getContentPane().add(titre, BorderLayout.NORTH);
         this.getContentPane().add(score, BorderLayout.WEST);
@@ -43,13 +44,34 @@ public class FenetreJeu extends Vue implements Observer {
         this.setVisible(true);
     }
 
-    public void updateGrid(Modele plateau) {
+    public void updateGrid(final Modele plateau) {
+        if(!SwingUtilities.isEventDispatchThread()){
+            SwingUtilities.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    updateGrid(plateau);
+                }
+            });
+            
+            return;
+        }
         grid.updateGrid(plateau.getColorGrid());
         pieces.updatePiece(plateau.getSuivantes());
     }
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(final Observable o, final Object arg) {
+        if(!SwingUtilities.isEventDispatchThread()){
+            SwingUtilities.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    update(o, arg);
+                }
+            });
+            return;
+        }
         if (o instanceof Modele) {
             this.getContentPane().remove(score);
             this.getContentPane().remove(grid);

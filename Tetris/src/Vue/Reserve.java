@@ -8,7 +8,7 @@ package Vue;
 
 import Modele.Vecteur;
 import Modele.Piece;
-import java.awt.Color;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -30,7 +30,7 @@ public class Reserve extends Grid{
         Vecteur<Integer> points[] = _piece.getForme().getPoints();
         for (int i = n*4; i<n*4+4;i++){
             for (int j=0; j<4;j++){
-                this.setValueAt(Color.BLACK, i, j);
+                this.setValueAt(new ImageIcon (getClass().getResource("/images/Frames/vide.png")), i, j);
             }
         }
         for (Vecteur<Integer> point : points) {

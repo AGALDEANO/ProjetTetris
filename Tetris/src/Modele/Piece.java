@@ -19,7 +19,7 @@ public class Piece {
     private ImageIcon frame;
     private int idColor;
     private static final Random rand = new Random();
-    private static final int nombrePieces = 9;
+    public static final int nombrePieces = 9;
     
     public Piece(int _forme, int _couleur){
         forme= Forme.Forme(_forme);
@@ -93,6 +93,12 @@ public class Piece {
     public static Piece randPiece()
     {
         return new Piece(rand.nextInt(nombrePieces)+1);
+    }
+    
+    public static Piece randPiece(int i)
+    {
+        i=(i<1?1:i);
+        return new Piece(rand.nextInt(i)+1);
     }
    
     public void rotCW()

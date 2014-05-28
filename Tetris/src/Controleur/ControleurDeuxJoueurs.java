@@ -3,48 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package Controleur;
 
+import Modele.ModeleDeuxJoueurs;
 import Modele.Modele;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  *
- * @author Dimitri
+ * @author 4lexandre
  */
-public class Controleur implements KeyListener {
+public class ControleurDeuxJoueurs extends Controleur {
 
-    protected final Modele plateau;
-
-    public Controleur(Modele _plateau) {
-        plateau = _plateau;
+    protected final Modele plateau2;
+    public ControleurDeuxJoueurs(ModeleDeuxJoueurs _plateaux) {
+        super(_plateaux.getPlateau1());
+        plateau2 = _plateaux.getPlateau2();
     }
-
+    
+    
     @Override
     public void keyTyped(KeyEvent e) {
         boolean pause;
         switch (e.getKeyChar()) {
-            // Joueur
-            
-            case 'q':
-                plateau.deplacementGauche();
-                break;
-            case 's':
-                plateau.modifierVitesse(4.0f*plateau.getVitesseBase());
-                break;
-            case 'd':
-                plateau.deplacementDroite();
-                break;
-            case 'l':
-                plateau.rotCW();
-                break;
-            case 'm':
-                plateau.rotACW();
-                break;
-                
             // Joueur1
-            /*
             case 'q':
                 plateau.deplacementGauche();
                 break;
@@ -60,33 +43,38 @@ public class Controleur implements KeyListener {
             case 'g':
                 plateau.rotACW();
                 break;
-                */
+                
             // Joueur2
-                /*
             case '1':
-                plateau.deplacementGauche();
+                plateau2.deplacementGauche();
                 break;
             case '2':
-                plateau.modifierVitesse(4.0f*plateau.getVitesseBase());
+                plateau2.modifierVitesse(4.0f*plateau2.getVitesseBase());
                 break;
             case '3':
-                plateau.deplacementDroite();
+                plateau2.deplacementDroite();
                 break;
             case '6':
-                plateau.rotCW();
+                plateau2.rotCW();
                 break;
             case '9':
-                plateau.rotACW();
+                plateau2.rotACW();
                 break;
-                */
+                
             case KeyEvent.VK_ESCAPE:
                 synchronized (plateau) {
                     pause = plateau.getPause();
                 }
+                synchronized(plateau2)
+                {
+                    pause |= plateau2.getPause();
+                }
                 if (pause) {
                     plateau.play();
+                    plateau2.play();
                 } else {
                     plateau.pause();
+                    plateau2.pause();
                 }
                 break;
             default:
@@ -106,7 +94,10 @@ public class Controleur implements KeyListener {
             plateau.resetVitesse();
         }
         if (e.getKeyChar() == '2') {
-            plateau.resetVitesse();
+            plateau2.resetVitesse();
         }
     }
+    
+    
+    
 }

@@ -28,6 +28,30 @@ public class FenetreJeu extends Vue implements Observer {
     private JLabel titre;
     private JLabel gameOver;
 
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    public GrilleTetris getGrid() {
+        return grid;
+    }
+
+    public void setGrid(GrilleTetris grid) {
+        this.grid = grid;
+    }
+
+    public Reserve getPieces() {
+        return pieces;
+    }
+
+    public void setPieces(Reserve pieces) {
+        this.pieces = pieces;
+    }
+
     public FenetreJeu(Modele plateau) {
         super();
 
@@ -55,24 +79,26 @@ public class FenetreJeu extends Vue implements Observer {
     }
 
     public void updateGrid(final Modele plateau) {
-        if(!SwingUtilities.isEventDispatchThread()){
-            SwingUtilities.invokeLater(new Runnable() {
+        if (!plateau.getFin()) {
+            if (!SwingUtilities.isEventDispatchThread()) {
+                SwingUtilities.invokeLater(new Runnable() {
 
-                @Override
-                public void run() {
-                    updateGrid(plateau);
-                }
-            });
-            
-            return;
+                    @Override
+                    public void run() {
+                        updateGrid(plateau);
+                    }
+                });
+
+                return;
+            }
+            grid.updateGrid(plateau.getColorGrid());
+            pieces.updatePiece(plateau.getSuivantes());
         }
-        grid.updateGrid(plateau.getColorGrid());
-        pieces.updatePiece(plateau.getSuivantes());
     }
 
     @Override
     public void update(final Observable o, final Object arg) {
-        if(!SwingUtilities.isEventDispatchThread()){
+        if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(new Runnable() {
 
                 @Override

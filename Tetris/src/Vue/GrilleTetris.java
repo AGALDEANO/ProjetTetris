@@ -6,36 +6,39 @@
 
 package Vue;
 
-import java.awt.Color;
+import javax.swing.ImageIcon;
 
 /**
  *
  * @author Dimitri
  */
 public class GrilleTetris extends Grid{
-    private Color[][] tableau;
+    private ImageIcon[][] images;
+    private final ImageIcon frame ;
     private int hauteurZoneFantome;
     
     public GrilleTetris (int _ligne, int _colonne,int hzf){
         super(_ligne-hzf,_colonne);
         hauteurZoneFantome=hzf;
-        tableau = new Color[_ligne][_colonne];
+        images = new ImageIcon[_ligne][_colonne];
+        frame = new ImageIcon (getClass().getResource("/images/frames/vide.png"));
         resetTableau();
     }
     
     public GrilleTetris (){
         super(16,10);
         hauteurZoneFantome=4;
-        tableau = new Color[20][10];
+        images = new ImageIcon[20][10];
+        frame = new ImageIcon (getClass().getResource("/images/frames/vide.png"));
         resetTableau();
     }
     
     public void resetTableau (){
         for (int i=0; i<this.getRowCount()+hauteurZoneFantome;i++){
             for (int j=0;j<this.getColumnCount(); j++){
-                tableau[i][j]=Color.BLACK;
+                images[i][j]=frame;
                 if (i>=hauteurZoneFantome){
-                    this.setValueAt(tableau[i][j], i-hauteurZoneFantome, j);
+                    this.setValueAt(images[i][j], i-hauteurZoneFantome, j);
                 }
             }
         }
@@ -45,19 +48,19 @@ public class GrilleTetris extends Grid{
         String res="";
         for (int i=0; i<this.getRowCount();i++){
             for (int j=0;j<this.getColumnCount(); j++){
-                res+=tableau[i][j].toString()+' ';
+                res+=images[i][j].toString()+' ';
             }
             res+='\n';
         }
         return res;
     }
     
-    public void updateGrid(Color[][]plateau){
-        tableau=plateau;
+    public void updateGrid(ImageIcon[][]plateau){
+        images=plateau;
         for (int i=0; i<this.getRowCount()+hauteurZoneFantome;i++){
             for (int j=0;j<this.getColumnCount(); j++){
                 if (i>=hauteurZoneFantome){
-                    this.setValueAt(tableau[i][j], i-hauteurZoneFantome, j);
+                    this.setValueAt(images[i][j], i-hauteurZoneFantome, j);
                 }
             }
         }

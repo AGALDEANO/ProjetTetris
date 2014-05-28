@@ -5,9 +5,9 @@
  */
 package Modele;
 
-import java.awt.Color;
 import java.util.Observable;
 import java.util.Timer;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -49,12 +49,13 @@ public class Modele extends Observable implements Runnable {
         return plateau.getTailleY();
     }
 
-    public Color[][] getColorGrid() {
-        Color[][] tab = new Color[plateau.getTailleX()][plateau.getTailleY()];
+    public ImageIcon[][] getColorGrid() {
+        Piece piece;
+        ImageIcon[][] tab = new ImageIcon[plateau.getTailleX()][plateau.getTailleY()];
         for (int i = 0; i < plateau.getTailleX(); i++) {
             for (int j = 0; j < plateau.getTailleY(); j++) {
-                Color color = Piece.getColor(plateau.getPlateau()[i][j]);
-                tab[i][j] = color;
+                piece=new Piece(plateau.getPlateau()[i][j]);
+                tab[i][j] =piece.getFrame();
             }
         }
         return tab;
@@ -80,9 +81,6 @@ public class Modele extends Observable implements Runnable {
 
     public void play() {
         pause = false;
-//        synchronized (timer) {
-//            timer.notify();
-//        }
 
         timer = new Timer();
         timer.scheduleAtFixedRate(new Timing(this), 0, (int) (50.0f / vitesseBase));
@@ -167,7 +165,10 @@ public class Modele extends Observable implements Runnable {
     @Override
     public void run() {
         timer.scheduleAtFixedRate(new Timing(this), 1000, 100);
-        if (!fin) {
+        while (!fin) {
+            
         }
+        timer.cancel();
+        timer.purge();
     }
 }

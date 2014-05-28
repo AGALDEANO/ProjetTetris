@@ -7,8 +7,8 @@
 package Modele;
 
 import Modele.Forme;
-import java.awt.Color;
 import java.util.Random;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public class Piece {
     private Forme forme;
-    private Color frame;
+    private ImageIcon frame;
     private int idColor;
     private static final Random rand = new Random();
     private static final int nombrePieces = 9;
@@ -41,39 +41,42 @@ public class Piece {
         this.forme = forme;
     }
 
-    public Color getFrame() {
+    public ImageIcon getFrame() {
         return frame;
     }
     public int getIdColor() {
         return idColor;
     }
 
-    public void setFrame(Color frame) {
+    public void setFrame(ImageIcon frame) {
         this.frame = frame;
     }
     
     public void setFrame (int couleur){
         switch (couleur){
+            case 0:
+                frame=new ImageIcon (getClass().getResource("/images/Frames/vide.png"));
+                break;
             case(Forme._T):
-                frame=Color.MAGENTA;
+                frame=new ImageIcon (getClass().getResource("/images/Frames/violet.png"));
                 break;
             case(Forme._S):
-                frame=Color.GREEN;
+                frame=new ImageIcon (getClass().getResource("/images/Frames/vertFonce.png"));
                 break;
             case(Forme._Z):
-                frame=Color.RED;
+                frame=new ImageIcon (getClass().getResource("/images/Frames/rouge.png"));
                 break;
             case(Forme._L):
-                frame=Color.ORANGE;
+                frame=new ImageIcon (getClass().getResource("/images/Frames/orange.png"));
                 break;
             case(Forme._J):
-                frame=Color.BLUE;
+                frame=new ImageIcon (getClass().getResource("/images/Frames/bleuFonce.png"));
                 break;
             case(Forme._I):
-                frame=Color.CYAN;
+                frame=new ImageIcon (getClass().getResource("/images/Frames/marron.png"));
                 break;
             case(Forme._O):
-                frame=Color.YELLOW;
+                frame=new ImageIcon (getClass().getResource("/images/Frames/jaune.png"));
                 break;
             case(Forme._P):
                 frame=Color.GRAY;
@@ -82,33 +85,8 @@ public class Piece {
                 frame=Color.WHITE;
                 break;
             default:
-                frame=Color.YELLOW;
+                frame=new ImageIcon (getClass().getResource("/images/Frames/vertClair.png"));
                 break;
-        }
-    }
-    
-    public static Color getColor(int couleur){
-        switch (couleur){
-            case(Forme._T):
-                return Color.MAGENTA;
-            case(Forme._S):
-                return Color.GREEN;
-            case(Forme._Z):
-                return Color.RED;
-            case(Forme._L):
-                return Color.ORANGE;
-            case(Forme._J):
-                return Color.BLUE;
-            case(Forme._I):
-                return Color.CYAN;
-            case(Forme._O):
-                return Color.YELLOW;
-            case(Forme._P):
-                return Color.GRAY;
-            case(Forme._U):
-                return Color.WHITE;
-            default:
-                return Color.BLACK;
         }
     }
     

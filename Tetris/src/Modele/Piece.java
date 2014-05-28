@@ -79,10 +79,10 @@ public class Piece {
                 frame=new ImageIcon (getClass().getResource("/images/Frames/jaune.png"));
                 break;
             case(Forme._P):
-                frame=Color.GRAY;
+                frame=new ImageIcon (getClass().getResource("/images/Frames/gris.png"));
                 break;
             case(Forme._U):
-                frame=Color.WHITE;
+                frame=new ImageIcon (getClass().getResource("/images/Frames/blanc.png"));
                 break;
             default:
                 frame=new ImageIcon (getClass().getResource("/images/Frames/vertClair.png"));

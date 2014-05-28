@@ -22,6 +22,7 @@ public class Modele extends Observable implements Runnable {
     private Plateau plateau;
     private Timer timer;
     private int score;
+    private int nbLignes;
 
     public Modele() {
         pause = false;
@@ -31,6 +32,11 @@ public class Modele extends Observable implements Runnable {
         plateau = new Plateau();
         timer = new Timer();
         score = 0;
+        nbLignes=0;
+    }
+
+    public int getNbLignes() {
+        return nbLignes;
     }
 
     public boolean getFin() {
@@ -139,10 +145,10 @@ public class Modele extends Observable implements Runnable {
             int[] lines = plateau.checkLines();
             plateau.deleteLines(lines);
             if (lines != null) {
+                nbLignes+=lines.length;
                 score +=Math.ceil(vitesseBase + 1)*lines.length ;
                 vitesseBase = (float) Math.log(Math.log(score)+1)/4 + 0.4f;
                 resetVitesse();
-                System.out.println(vitesse);
             }
             for (i = 0; i < plateau.getTailleY(); i++) {
                 if (plateau.getPlateau()[0][i] != 0) {

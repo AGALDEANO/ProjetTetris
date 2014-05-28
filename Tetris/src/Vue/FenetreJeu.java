@@ -78,7 +78,7 @@ public class FenetreJeu extends Vue implements Observer {
             this.getContentPane().remove(pieces);
             Modele plateau = (Modele) o;
             updateGrid(plateau);
-            score.setScore(plateau.getScore());
+            score.setScore(plateau.getScore(),plateau.getNbLignes());
 
         }
         this.getContentPane().add(score, BorderLayout.WEST);

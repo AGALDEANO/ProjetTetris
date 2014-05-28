@@ -6,6 +6,7 @@
 package Modele;
 
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Timer;
 import javax.swing.ImageIcon;
 
@@ -189,5 +190,11 @@ public class Modele extends Observable implements Runnable {
     @Override
     public void run() {
         timer.scheduleAtFixedRate(new Timing(this), 1000, 100);
+    }
+    
+    @Override
+    public void addObserver(Observer o)
+    {
+        super.addObserver(o);
     }
 }

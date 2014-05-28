@@ -25,6 +25,30 @@ public class FenetreJeu extends Vue implements Observer {
     private Reserve pieces;
     private JLabel titre;
 
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    public GrilleTetris getGrid() {
+        return grid;
+    }
+
+    public void setGrid(GrilleTetris grid) {
+        this.grid = grid;
+    }
+
+    public Reserve getPieces() {
+        return pieces;
+    }
+
+    public void setPieces(Reserve pieces) {
+        this.pieces = pieces;
+    }
+
     public FenetreJeu(Modele plateau) {
         super();
 
